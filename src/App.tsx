@@ -6,7 +6,7 @@ import Container from "@mui/material/Container";
 
 import { TopPageButtons } from "./components/TopPageButtoms";
 
-const StyledWrapper = styled("div")({
+const Wrapper = styled("div")({
   height: "100%",
   display: "flex",
   justifyContent: "center",
@@ -16,9 +16,9 @@ const StyledWrapper = styled("div")({
 const App: React.FC = (): JSX.Element => {
   return (
     <Container maxWidth="sm" sx={{ height: "100vh" }}>
-      <StyledWrapper>
+      <Wrapper>
         <TopPageButtons />
-      </StyledWrapper>
+      </Wrapper>
     </Container>
   );
 };
