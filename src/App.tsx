@@ -4,7 +4,7 @@ import React from "react";
 import { styled } from "@mui/system";
 import Container from "@mui/material/Container";
 
-import { TopPageButtons } from "./components/TopPageButtoms";
+import { TopPageButtons } from "./components/TopPageButtons";
 
 const Wrapper = styled("div")({
   height: "100%",
