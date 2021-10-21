@@ -5,6 +5,7 @@ import { styled } from "@mui/system";
 import Container from "@mui/material/Container";
 
 import { TopPageButtons } from "./components/TopPageButtons";
+import { CreateRoomDialog } from "./components/CreateRoom/CreateRoomDialog";
 
 const Wrapper = styled("div")({
   height: "100%",
@@ -15,11 +16,14 @@ const Wrapper = styled("div")({
 
 const App: React.FC = (): JSX.Element => {
   return (
-    <Container maxWidth="sm" sx={{ height: "100vh" }}>
-      <Wrapper>
-        <TopPageButtons />
-      </Wrapper>
-    </Container>
+    <React.Fragment>
+      <Container maxWidth="sm" sx={{ height: "100vh" }}>
+        <Wrapper>
+          <TopPageButtons />
+        </Wrapper>
+      </Container>
+      <CreateRoomDialog />
+    </React.Fragment>
   );
 };
 
