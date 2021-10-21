@@ -1,25 +1,25 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 
-const App = (): JSX.Element => {
+//mui
+import { styled } from "@mui/system";
+import Container from "@mui/material/Container";
+
+import { TopPageButtons } from "./components/TopPageButtons";
+
+const Wrapper = styled("div")({
+  height: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
+
+const App: React.FC = (): JSX.Element => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container maxWidth="sm" sx={{ height: "100vh" }}>
+      <Wrapper>
+        <TopPageButtons />
+      </Wrapper>
+    </Container>
   );
 };
 
