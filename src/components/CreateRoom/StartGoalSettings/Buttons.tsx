@@ -8,7 +8,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ShuffleIcon from "@mui/icons-material/Shuffle";
 import CancelIcon from "@mui/icons-material/Close";
 
-import { SquareButton } from "../general/SquareButton";
+import { SquareButton } from "../../general/SquareButton";
 
 interface Props {
   urlTitle: string | undefined;

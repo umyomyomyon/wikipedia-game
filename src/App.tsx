@@ -5,7 +5,9 @@ import { styled } from "@mui/system";
 import Container from "@mui/material/Container";
 
 import { TopPageButtons } from "./components/TopPageButtons";
-import { CreateRoomDialog } from "./components/CreateRoom/CreateRoomDialog";
+import { CreateRoomDialog } from "./components/CreateRoom/Dialog";
+import { JoinDialog } from "./components/Join/Dialog";
+import { WaitDialog } from "./components/Wait/Dialog";
 
 const Wrapper = styled("div")({
   height: "100%",
@@ -22,7 +24,9 @@ const App: React.FC = (): JSX.Element => {
           <TopPageButtons />
         </Wrapper>
       </Container>
-      <CreateRoomDialog />
+      <CreateRoomDialog open={false} />
+      <JoinDialog open={false} />
+      <WaitDialog open={true} />
     </React.Fragment>
   );
 };
