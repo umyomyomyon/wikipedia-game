@@ -5,23 +5,20 @@ import { styled } from "@mui/system";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 
-import { StartGoalSettingTextField } from "./StartGoalSettingTextField";
-import { StartGoalSettingButtons } from "./StartGoalSettingButtons";
+import { StartGoalSettingTextField } from "./TextField";
+import { StartGoalSettingButtons } from "./Buttons";
 
 import {
   validateWikipediaUrl,
   extractTitleFromURL,
-} from "../../utils/validations";
+} from "../../../utils/validations";
+
+import { makeContainer } from "../../../utils/styled";
 
 const SettingsContainer = styled(Stack)({
   width: "90%",
   marginLeft: "10%",
 });
-
-const makeContainer = (width: number) =>
-  styled("div")({
-    width,
-  });
 
 const TextContainer = makeContainer(53);
 const TextFieldContainer = makeContainer(235);
