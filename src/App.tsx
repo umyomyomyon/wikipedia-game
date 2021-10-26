@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { Top } from "./components/Top";
-import { PermanentDrawerLeft } from "./components/Game";
+import { Game } from "./components/Game";
 
 const App: React.FC = (): JSX.Element => {
   return (
@@ -12,7 +12,7 @@ const App: React.FC = (): JSX.Element => {
           <Top />
         </Route>
         <Route exact path="/main">
-          <PermanentDrawerLeft />
+          <Game />
         </Route>
       </Switch>
     </Router>
