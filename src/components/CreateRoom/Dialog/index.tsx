@@ -9,7 +9,7 @@ import DialogActions from "@mui/material/DialogActions";
 // components
 import { DialogBase } from "../../general/DialogBase";
 import { StartGoalSettings } from "../StartGoalSettings";
-import { UserList, dummyUserList } from "../../UserList";
+import { UserList, dummyUserList } from "../../general/UserList";
 
 const StyledTypography = styled(Typography)({
   fontWeight: "bold",
