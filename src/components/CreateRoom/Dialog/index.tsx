@@ -17,10 +17,12 @@ const StyledTypography = styled(Typography)({
 
 interface CreateRoomDialogProps {
   open: boolean;
+  handleClose: () => void;
 }
 
 export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
   open,
+  handleClose,
 }): JSX.Element => {
   const [isReady, setIsReady] = useState<boolean>(false);
   const roomId = 38924;
@@ -28,6 +30,7 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
   return (
     <DialogBase
       open={open}
+      onClose={handleClose}
       title="みんなで"
       dialogActions={
         <DialogActions

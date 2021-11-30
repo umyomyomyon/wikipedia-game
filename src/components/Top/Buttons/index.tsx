@@ -10,12 +10,31 @@ const StyledButton = styled(Button)({
   width: 144,
 });
 
-export const TopPageButtons: React.FC = (): JSX.Element => {
+interface TopPageButtonProps {
+  handleClickCreateRoomDialogOpen: () => void;
+  handleClickJoinDialogOpen: () => void;
+  handleClickWaitDialogOpen: () => void;
+}
+
+export const TopPageButtons: React.FC<TopPageButtonProps> = ({
+  handleClickCreateRoomDialogOpen,
+  handleClickJoinDialogOpen,
+  handleClickWaitDialogOpen,
+}): JSX.Element => {
   return (
     <Stack direction="column" spacing={2}>
-      <StyledButton variant="contained">１人で始める</StyledButton>
-      <StyledButton variant="contained">部屋を作る</StyledButton>
-      <StyledButton variant="contained">参加する</StyledButton>
+      <StyledButton
+        variant="contained"
+        onClick={handleClickCreateRoomDialogOpen}
+      >
+        １人で始める
+      </StyledButton>
+      <StyledButton variant="contained" onClick={handleClickJoinDialogOpen}>
+        部屋を作る
+      </StyledButton>
+      <StyledButton variant="contained" onClick={handleClickWaitDialogOpen}>
+        参加する
+      </StyledButton>
     </Stack>
   );
 };

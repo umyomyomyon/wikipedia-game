@@ -16,7 +16,7 @@ export const GamePage: React.FC = ({ children }): JSX.Element => {
       <SideMenu menuWidth={drawerWidth} />
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
+        sx={{ flexGrow: 0, bgcolor: "background.default", p: 3 }}
       >
         <Toolbar />
         {children}
