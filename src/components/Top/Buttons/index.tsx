@@ -29,10 +29,13 @@ export const TopPageButtons: React.FC<TopPageButtonProps> = ({
       >
         １人で始める
       </StyledButton>
-      <StyledButton variant="contained" onClick={handleClickJoinDialogOpen}>
+      <StyledButton
+        variant="contained"
+        onClick={handleClickCreateRoomDialogOpen}
+      >
         部屋を作る
       </StyledButton>
-      <StyledButton variant="contained" onClick={handleClickWaitDialogOpen}>
+      <StyledButton variant="contained" onClick={handleClickJoinDialogOpen}>
         参加する
       </StyledButton>
     </Stack>
