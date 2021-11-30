@@ -1,33 +1,21 @@
 import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-//mui
-import { styled } from "@mui/system";
-import Container from "@mui/material/Container";
-
-import { TopPageButtons } from "./components/TopPageButtons";
-import { CreateRoomDialog } from "./components/CreateRoom/Dialog";
-import { JoinDialog } from "./components/Join/Dialog";
-import { WaitDialog } from "./components/Wait/Dialog";
-
-const Wrapper = styled("div")({
-  height: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-});
+import { Top } from "./components/Top";
+import { Game } from "./components/Game";
 
 const App: React.FC = (): JSX.Element => {
   return (
-    <React.Fragment>
-      <Container maxWidth="sm" sx={{ height: "100vh" }}>
-        <Wrapper>
-          <TopPageButtons />
-        </Wrapper>
-      </Container>
-      <CreateRoomDialog open={false} />
-      <JoinDialog open={false} />
-      <WaitDialog open={true} />
-    </React.Fragment>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Top />
+        </Route>
+        <Route exact path="/main">
+          <Game />
+        </Route>
+      </Switch>
+    </Router>
   );
 };
 

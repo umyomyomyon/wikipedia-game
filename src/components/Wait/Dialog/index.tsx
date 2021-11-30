@@ -8,7 +8,7 @@ import DialogActions from "@mui/material/DialogActions";
 
 // components
 import { DialogBase } from "../../general/DialogBase";
-import { UserList, dummyUserList } from "../../UserList";
+import { UserList, dummyUserList } from "../../general/UserList";
 import { TargetArticle } from "./TargetArticle";
 
 const TargetContainer = styled(Stack)({
