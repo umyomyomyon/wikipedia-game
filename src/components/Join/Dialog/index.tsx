@@ -10,14 +10,17 @@ import { DialogBase } from "../../general/DialogBase";
 
 interface JoinDialogProps {
   open: boolean;
+  handleClose: () => void;
 }
 
 export const JoinDialog: React.FC<JoinDialogProps> = ({
   open,
+  handleClose,
 }): JSX.Element => {
   return (
     <DialogBase
       open={open}
+      onClose={handleClose}
       title="参加する"
       contentSx={{ marginLeft: "auto", marginRight: "auto" }}
     >

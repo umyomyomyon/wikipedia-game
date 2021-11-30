@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 //mui
 import { styled } from "@mui/system";
@@ -17,16 +17,35 @@ const Wrapper = styled("div")({
 });
 
 export const Top: React.FC = (): JSX.Element => {
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState<boolean>(false);
+  const [isJoinDialogOpen, setIsJoinDialogOpen] = useState<boolean>(false);
+  const [isWaitDialogOpen, setIsWaitDialogOpen] = useState<boolean>(false);
+
+  const topPageButtonHandlers = {
+    handleClickCreateRoomDialogOpen: () => setIsCreateDialogOpen(true),
+    handleClickJoinDialogOpen: () => setIsJoinDialogOpen(true),
+    handleClickWaitDialogOpen: () => setIsWaitDialogOpen(true),
+  };
+
   return (
     <React.Fragment>
       <Container maxWidth="sm" sx={{ height: "100vh" }}>
         <Wrapper>
-          <TopPageButtons />
+          <TopPageButtons {...topPageButtonHandlers} />
         </Wrapper>
       </Container>
-      <CreateRoomDialog open={false} />
-      <JoinDialog open={false} />
-      <WaitDialog open={false} />
+      <CreateRoomDialog
+        open={isCreateDialogOpen}
+        handleClose={() => setIsCreateDialogOpen(false)}
+      />
+      <JoinDialog
+        open={isJoinDialogOpen}
+        handleClose={() => setIsJoinDialogOpen(false)}
+      />
+      <WaitDialog
+        open={isWaitDialogOpen}
+        handleClose={() => setIsWaitDialogOpen(false)}
+      />
     </React.Fragment>
   );
 };

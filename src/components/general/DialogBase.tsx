@@ -9,6 +9,7 @@ import Divider from "@mui/material/Divider";
 
 interface DialogBaseProps {
   open: boolean;
+  onClose: () => void;
   title: string;
   dialogActions?: JSX.Element;
   contentSx?: SxProps;
@@ -17,6 +18,7 @@ interface DialogBaseProps {
 export const DialogBase: React.FC<DialogBaseProps> = ({
   children,
   open,
+  onClose,
   title,
   dialogActions,
   contentSx,
@@ -24,6 +26,7 @@ export const DialogBase: React.FC<DialogBaseProps> = ({
   return (
     <Dialog
       open={open}
+      onClose={onClose}
       PaperProps={{ sx: { backgroundColor: "#e0e9f0", width: "80%" } }}
     >
       <DialogTitle color="primary" sx={{ fontWeight: "bold" }}>

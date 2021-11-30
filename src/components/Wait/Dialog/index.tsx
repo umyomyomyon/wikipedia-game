@@ -20,12 +20,14 @@ const StyledTypography = styled(Typography)({
   fontWeight: "bold",
 });
 
-interface CreateRoomDialogProps {
+interface WaitDialogProps {
   open: boolean;
+  handleClose: () => void;
 }
 
-export const WaitDialog: React.FC<CreateRoomDialogProps> = ({
+export const WaitDialog: React.FC<WaitDialogProps> = ({
   open,
+  handleClose,
 }): JSX.Element => {
   const roomId = 38924;
   const startTarget = "対消滅";
@@ -34,6 +36,7 @@ export const WaitDialog: React.FC<CreateRoomDialogProps> = ({
   return (
     <DialogBase
       open={open}
+      onClose={handleClose}
       title="みんなで"
       dialogActions={
         <DialogActions
