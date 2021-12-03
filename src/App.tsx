@@ -1,21 +1,25 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 
-import { Top } from "./components/Top";
-import { Game } from "./components/Game";
+// pages
+import { Top } from "./pages/Top";
+import { Game } from "./pages/Game";
 
 const App: React.FC = (): JSX.Element => {
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <Top />
-        </Route>
-        <Route exact path="/main">
-          <Game />
-        </Route>
-      </Switch>
-    </Router>
+    <RecoilRoot>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Top />
+          </Route>
+          <Route exact path="/main">
+            <Game />
+          </Route>
+        </Switch>
+      </Router>
+    </RecoilRoot>
   );
 };
 

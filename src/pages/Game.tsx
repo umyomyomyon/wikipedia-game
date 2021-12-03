@@ -1,9 +1,12 @@
-import React from "react";
+import * as React from "react";
 
 // mui
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
-import { GamePage } from "./GamePage";
+import { SideMenu } from "../components/Game/SideMenu";
+import { Bar } from "../components/Game/Bar";
 
 const Content: React.FC = (): JSX.Element => {
   return (
@@ -40,10 +43,20 @@ const Content: React.FC = (): JSX.Element => {
   );
 };
 
-export const Game: React.FC = () => {
+const drawerWidth = 240;
+
+export const Game: React.FC = (): JSX.Element => {
   return (
-    <GamePage>
-      <Content />
-    </GamePage>
+    <Box sx={{ display: "flex" }}>
+      <Bar menuWidth={drawerWidth} />
+      <SideMenu menuWidth={drawerWidth} />
+      <Box
+        component="main"
+        sx={{ flexGrow: 0, bgcolor: "background.default", p: 3 }}
+      >
+        <Toolbar />
+        <Content />
+      </Box>
+    </Box>
   );
 };
