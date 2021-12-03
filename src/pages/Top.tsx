@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import { styled } from "@mui/system";
 import Container from "@mui/material/Container";
 
-import { TopPageButtons } from "./Buttons";
-import { CreateRoomDialog } from "../CreateRoom/Dialog";
-import { JoinDialog } from "../Join/Dialog";
-import { WaitDialog } from "../Wait/Dialog";
+import { TopPageButtons } from "../components/Top/Buttons";
+import { CreateRoomDialog } from "../components/CreateRoom/Dialog";
+import { JoinDialog } from "../components/Join/Dialog";
+import { WaitDialog } from "../components/Wait/Dialog";
 
 const Wrapper = styled("div")({
   height: "100%",
