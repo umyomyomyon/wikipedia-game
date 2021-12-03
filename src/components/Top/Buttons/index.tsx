@@ -11,12 +11,14 @@ const StyledButton = styled(Button)({
 });
 
 interface TopPageButtonProps {
+  enable: boolean;
   handleClickCreateRoomDialogOpen: () => void;
   handleClickJoinDialogOpen: () => void;
   handleClickWaitDialogOpen: () => void;
 }
 
 export const TopPageButtons: React.FC<TopPageButtonProps> = ({
+  enable,
   handleClickCreateRoomDialogOpen,
   handleClickJoinDialogOpen,
   handleClickWaitDialogOpen,
@@ -26,16 +28,22 @@ export const TopPageButtons: React.FC<TopPageButtonProps> = ({
       <StyledButton
         variant="contained"
         onClick={handleClickCreateRoomDialogOpen}
+        disabled={!enable}
       >
         １人で始める
       </StyledButton>
       <StyledButton
         variant="contained"
         onClick={handleClickCreateRoomDialogOpen}
+        disabled={!enable}
       >
         部屋を作る
       </StyledButton>
-      <StyledButton variant="contained" onClick={handleClickJoinDialogOpen}>
+      <StyledButton
+        variant="contained"
+        onClick={handleClickJoinDialogOpen}
+        disabled={!enable}
+      >
         参加する
       </StyledButton>
     </Stack>

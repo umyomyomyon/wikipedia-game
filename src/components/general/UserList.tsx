@@ -8,10 +8,8 @@ import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import PersonIcon from "@mui/icons-material/Person";
 
-interface UserData {
-  uuid: string;
-  name: string;
-}
+// types
+import { UserData } from "../../types/user";
 
 interface UserListProps {
   users: UserData[];
