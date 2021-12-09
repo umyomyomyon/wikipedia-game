@@ -31,3 +31,7 @@ export const arrangeUsers = (
   );
   return arrangedUsers;
 };
+
+export const joinRoom = (roomId: number) => {
+  console.log(roomId);
+};

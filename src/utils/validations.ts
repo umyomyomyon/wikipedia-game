@@ -4,7 +4,7 @@ const extractTitleFromURL = (url: string): string => {
   return splited[splited.length - 1];
 };
 
-const validateURL = (value: string) => {
+const validateURL = (value: string): boolean => {
   // eslint-disable-next-line
   const REGEX = /^(https)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/;
   return value.match(REGEX) ? true : false;
@@ -17,4 +17,8 @@ const validateWikipediaUrl = (url: string): boolean => {
   return url.match(REGEX) ? true : false;
 };
 
-export { extractTitleFromURL, validateWikipediaUrl };
+const validateRoomId = (roomId: number): boolean => {
+  return roomId >= 10000 && roomId <= 99999;
+};
+
+export { extractTitleFromURL, validateWikipediaUrl, validateRoomId };

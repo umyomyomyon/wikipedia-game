@@ -6,7 +6,7 @@ import { getAuth } from "@firebase/auth";
 import { onDisconnect, onValue, ref } from "@firebase/database";
 
 import { userName as userNameAtom } from "../recoil/atoms/user";
-import { createRoom, arrangeUsers } from "../utils/createRoom";
+import { createRoom, arrangeUsers } from "../utils/room";
 import { cloudrunUrl } from "../conf";
 import { UserData } from "../types/user";
 
