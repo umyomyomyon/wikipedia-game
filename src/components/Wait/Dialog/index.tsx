@@ -1,4 +1,5 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
 
 // mui
 import { styled } from "@mui/system";
@@ -10,6 +11,11 @@ import DialogActions from "@mui/material/DialogActions";
 import { DialogBase } from "../../general/DialogBase";
 import { UserList, dummyUserList } from "../../general/UserList";
 import { TargetArticle } from "./TargetArticle";
+
+// atoms
+import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
+
+import { useRoomUsers } from "../../../hooks/firebase";
 
 const TargetContainer = styled(Stack)({
   width: "90%",
@@ -29,7 +35,8 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
   open,
   handleClose,
 }): JSX.Element => {
-  const roomId = 38924;
+  const roomId = useRecoilValue(roomIdAtom);
+  const users = useRoomUsers(open, roomId);
   const startTarget = "対消滅";
   const goalTarget = undefined;
 
@@ -56,7 +63,7 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
           <TargetArticle target={goalTarget} startOrGoal="goal" />
         </Stack>
       </TargetContainer>
-      <UserList users={dummyUserList} />
+      <UserList users={users} />
     </DialogBase>
   );
 };

@@ -29,9 +29,10 @@ export const Top: React.FC = (): JSX.Element => {
   const userNameConfirmed = useRecoilValue(userNameConfirmedAtom);
 
   const topPageButtonHandlers = {
-    handleClickCreateRoomDialogOpen: () => setIsCreateDialogOpen(true),
-    handleClickJoinDialogOpen: () => setIsJoinDialogOpen(true),
-    handleClickWaitDialogOpen: () => setIsWaitDialogOpen(true),
+    handleClickCreateRoomDialogOpen: () =>
+      setIsCreateDialogOpen(!isCreateDialogOpen),
+    handleClickJoinDialogOpen: () => setIsJoinDialogOpen(!isJoinDialogOpen),
+    handleClickWaitDialogOpen: () => setIsWaitDialogOpen(!isWaitDialogOpen),
   };
 
   return (
@@ -52,6 +53,7 @@ export const Top: React.FC = (): JSX.Element => {
       <JoinDialog
         open={isJoinDialogOpen}
         handleClose={() => setIsJoinDialogOpen(false)}
+        handleOpenWaitDialog={() => setIsWaitDialogOpen(true)}
       />
       <WaitDialog
         open={isWaitDialogOpen}
