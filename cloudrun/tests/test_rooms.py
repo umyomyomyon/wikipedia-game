@@ -63,8 +63,8 @@ def test_check_room_exists():
 @room_decorator(20000)
 def test_join_room():
     room_id = 20000
-    user_uuid = 'test_user_uuid'
-    user_name = 'test_user_name'
+    user_uuid = 'join_user_uuid'
+    user_name = 'join_user_name'
     _join_room(room_id, user_uuid, user_name)
 
     ref = db.reference(f'{room_id}/users/{user_uuid}/')

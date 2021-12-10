@@ -45,7 +45,7 @@ def join_room():
     except RoomNotExistException as e:
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
-        return jsonify({'message': 'json room failed.'}), 400
+        return jsonify({'message': 'join room failed.'}), 400
 
 
 if __name__ == '__main__':

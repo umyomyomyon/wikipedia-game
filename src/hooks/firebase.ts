@@ -7,7 +7,6 @@ import { onDisconnect, onValue, ref } from "@firebase/database";
 
 import { userName as userNameAtom } from "../recoil/atoms/user";
 import { createRoom, arrangeUsers } from "../utils/room";
-import { cloudrunUrl } from "../conf";
 import { UserData } from "../types/user";
 
 const useCreateRoom = (open: boolean): number | undefined => {
@@ -20,8 +19,7 @@ const useCreateRoom = (open: boolean): number | undefined => {
     const uid = auth.currentUser ? auth.currentUser.uid : undefined;
     if (!uid) return;
 
-    const url = `${cloudrunUrl}/room`;
-    createRoom(uid, userName, url).then((result) => {
+    createRoom(uid, userName).then((result) => {
       setRoomId(result);
     });
   }, [open]);

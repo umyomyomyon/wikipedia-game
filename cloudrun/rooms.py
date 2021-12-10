@@ -51,7 +51,8 @@ def _join_room(room_id: int, user_uuid: str, user_name: str):
     if not is_room_exists:
         raise RoomNotExistException
     room_users_ref = db.reference(f'{room_id}/users/')
-    room_users_ref.set({user_uuid: user_name})
+    current_users = room_users_ref.get()
+    room_users_ref.set(current_users | {user_uuid: user_name})
 
 
 def destroy_room(room_id: int):
