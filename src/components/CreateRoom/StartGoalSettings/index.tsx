@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
 
 // mui
 import { styled } from "@mui/system";
@@ -14,6 +15,10 @@ import {
 } from "../../../utils/validations";
 
 import { makeContainer } from "../../../utils/styled";
+import { setStartOrGoalArticle } from "../../../utils/room";
+
+// atoms
+import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
 
 const SettingsContainer = styled(Stack)({
   width: "90%",
@@ -34,6 +39,7 @@ export const StartGoalSettings: React.FC = (): JSX.Element => {
   const [goalURLTitle, setGoalURLTitle] = useState<string | undefined>(
     undefined
   );
+  const roomId = useRecoilValue(roomIdAtom);
 
   const handleChange =
     (startOrGoal: "start" | "goal") =>
@@ -55,6 +61,20 @@ export const StartGoalSettings: React.FC = (): JSX.Element => {
       startOrGoal === "start" ? setStartURLTitle : setGoalURLTitle;
     titleStateHandler(title);
   };
+
+  useEffect(() => {
+    if (!roomId) return;
+    if (!startURL) return;
+    if (!startURLTitle) return;
+    setStartOrGoalArticle(roomId, startURL, startURLTitle, "start");
+  }, [startURLTitle]);
+
+  useEffect(() => {
+    if (!roomId) return;
+    if (!goalURL) return;
+    if (!goalURLTitle) return;
+    setStartOrGoalArticle(roomId, goalURL, goalURLTitle, "goal");
+  }, [goalURLTitle]);
 
   const handleCancelClick = (startOrGoal: "start" | "goal") => () => {
     const titleStateHandler =

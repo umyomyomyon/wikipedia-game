@@ -60,3 +60,15 @@ def destroy_room(room_id: int):
     if not is_exists_room_id:
         raise RoomNotExistException
     ref.delete()
+
+
+def setting_article(room_id: int, url: str, title: str, is_start: bool):
+    is_room_exists = check_room_exists(room_id)
+    if not is_room_exists:
+        raise RoomNotExistException
+    target = 'start' if is_start else 'goal'
+    ref = db.reference(f'{room_id}/{target}/')
+    ref.set({
+        'url': url,
+        'title': title
+    })

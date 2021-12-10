@@ -15,7 +15,7 @@ import { TargetArticle } from "./TargetArticle";
 // atoms
 import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
 
-import { useRoomUsers } from "../../../hooks/firebase";
+import { useRoomData } from "../../../hooks/firebase";
 
 const TargetContainer = styled(Stack)({
   width: "90%",
@@ -36,7 +36,7 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
   handleClose,
 }): JSX.Element => {
   const roomId = useRecoilValue(roomIdAtom);
-  const users = useRoomUsers(open, roomId);
+  const users = useRoomData(open, roomId);
   const startTarget = "対消滅";
   const goalTarget = undefined;
 

@@ -29,11 +29,11 @@ const useCreateRoom = (open: boolean): void => {
   }, [open]);
 };
 
-const useRoomUsers = (
-  open: boolean,
-  roomId: number | undefined
-): UserData[] => {
+const useRoomData = (open: boolean, roomId: number | undefined): UserData[] => {
   const [users, setUsers] = useState<UserData[]>([]);
+  const [isReady, setIsReady] = useState<boolean>(false);
+  const [startTarget, setStartTarget] = useState<string | undefined>(undefined);
+  const [goalTarget, setGoalTarget] = useState<string | undefined>(undefined);
   const userUuid = useRecoilValue(userUuidAtom);
 
   useEffect(() => {
@@ -44,6 +44,7 @@ const useRoomUsers = (
       if (data) {
         const arrangedUsers = arrangeUsers(data.users);
         setUsers(arrangedUsers);
+        setIsReady(data.isReady);
       }
     });
 
@@ -54,4 +55,4 @@ const useRoomUsers = (
   return users;
 };
 
-export { useCreateRoom, useRoomUsers };
+export { useCreateRoom, useRoomData };
