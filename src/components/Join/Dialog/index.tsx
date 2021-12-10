@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
-import { getAuth } from "@firebase/auth";
 
 // mui
 import Typography from "@mui/material/Typography";
@@ -13,7 +12,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { DialogBase } from "../../general/DialogBase";
 
 // atoms
-import { userName as userNameAtom } from "../../../recoil/atoms/user";
+import {
+  userName as userNameAtom,
+  userUuid as userUuidAtom,
+} from "../../../recoil/atoms/user";
 
 import { joinRoom } from "../../../utils/room";
 import { validateRoomId } from "../../../utils/validations";
@@ -31,6 +33,7 @@ export const JoinDialog: React.FC<JoinDialogProps> = ({
   const [roomIdError, setRoomIdError] = useState<boolean>(false);
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const userName = useRecoilValue(userNameAtom);
+  const userUuid = useRecoilValue(userUuidAtom);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomId(Number(e.currentTarget.value));
@@ -38,18 +41,16 @@ export const JoinDialog: React.FC<JoinDialogProps> = ({
 
   const handleClick = () => {
     if (!roomId) return;
+    if (!userUuid) return;
     const isValidRoomId = validateRoomId(roomId);
     if (!isValidRoomId) {
       setRoomIdError(true);
       return;
     }
-    const auth = getAuth();
-    const uid = auth.currentUser ? auth.currentUser.uid : undefined;
-    if (!uid) return;
 
     try {
       setIsFetching(true);
-      joinRoom(roomId, uid, userName);
+      joinRoom(roomId, userUuid, userName);
     } catch {
       // バックエンドとの通信が失敗した場合の処理
       console.error("error in handleClick at JoinDialog.");
