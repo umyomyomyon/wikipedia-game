@@ -15,7 +15,7 @@ firebase_admin.initialize_app(cred, {
 
 
 def check_room_exists(room_id: int, return_ref=False):
-    ref = db.reference(f'{int(room_id)}/')
+    ref = db.reference(f'{room_id}/')
     if return_ref:
         return bool(ref.get()), ref
     return bool(ref.get())
@@ -37,13 +37,22 @@ def create_room_id():
 
 
 def init_room(room_id: int, user_uuid: str, user_name: str):
-    ref = db.reference(f'{int(room_id)}/')
+    ref = db.reference(f'{room_id}/')
     ref.set({
         'isReady': False,
         'users': {
             user_uuid: user_name
         }
     })
+
+
+def _join_room(room_id: int, user_uuid: str, user_name: str):
+    is_room_exists = check_room_exists(room_id)
+    if not is_room_exists:
+        raise RoomNotExistException
+    room_users_ref = db.reference(f'{room_id}/users/')
+    current_users = room_users_ref.get()
+    room_users_ref.set(current_users | {user_uuid: user_name})
 
 
 def destroy_room(room_id: int):

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useRecoilState } from "recoil";
 
 import { getAuth, signInAnonymously } from "firebase/auth";
@@ -19,6 +19,7 @@ import { SquareButton } from "../../general/SquareButton";
 import {
   userName as userNameAtom,
   userNameConfirmed as userNameConfirmedAtom,
+  userUuid as userUuidAtom,
 } from "../../../recoil/atoms/user";
 
 export const PlayerNameForm: React.FC = (): JSX.Element => {
@@ -26,13 +27,10 @@ export const PlayerNameForm: React.FC = (): JSX.Element => {
   const [userNameConfirmed, setUserNameConfirmed] = useRecoilState(
     userNameConfirmedAtom
   );
+  const [userUuid, setUserUuid] = useRecoilState(userUuidAtom);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(e.currentTarget.value);
-  };
-
-  const handleFirebaseUid = (uid: string) => {
-    console.log(`firebase uid is: ${uid}`);
   };
 
   const handleClick = () => {
@@ -42,7 +40,7 @@ export const PlayerNameForm: React.FC = (): JSX.Element => {
     signInAnonymously(auth)
       .then(() => {
         if (auth.currentUser) {
-          handleFirebaseUid(auth.currentUser.uid);
+          setUserUuid(auth.currentUser.uid);
         }
       })
       .catch((err) => {
@@ -52,6 +50,7 @@ export const PlayerNameForm: React.FC = (): JSX.Element => {
 
   const handleCancelClick = () => {
     setUserName("");
+    setUserUuid(undefined);
     setUserNameConfirmed(false);
   };
 

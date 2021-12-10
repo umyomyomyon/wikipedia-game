@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
+
 // mui
 import { styled } from "@mui/system";
 import Typography from "@mui/material/Typography";
@@ -9,6 +11,9 @@ import DialogActions from "@mui/material/DialogActions";
 import { DialogBase } from "../../general/DialogBase";
 import { StartGoalSettings } from "../StartGoalSettings";
 import { UserList } from "../../general/UserList";
+
+// atoms
+import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
 
 import { useCreateRoom, useRoomUsers } from "../../../hooks/firebase";
 
@@ -26,9 +31,10 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
   handleClose,
 }): JSX.Element => {
   const [isReady, setIsReady] = useState<boolean>(false);
+  const roomId = useRecoilValue(roomIdAtom);
 
-  const roomId = useCreateRoom(open);
-  const users = useRoomUsers(roomId);
+  useCreateRoom(open);
+  const users = useRoomUsers(open, roomId);
 
   const wrappedHandleClose = () => {
     handleClose();
