@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
 
 // mui
 import { styled } from "@mui/system";
@@ -8,8 +9,14 @@ import DialogActions from "@mui/material/DialogActions";
 
 // components
 import { DialogBase } from "../../general/DialogBase";
-import { UserList, dummyUserList } from "../../general/UserList";
+import { UserList } from "../../general/UserList";
 import { TargetArticle } from "./TargetArticle";
+
+// atoms
+import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
+
+import { useRoomData } from "../../../hooks/firebase";
+import { extractTitleFromURL } from "../../../utils/validations";
 
 const TargetContainer = styled(Stack)({
   width: "90%",
@@ -29,9 +36,20 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
   open,
   handleClose,
 }): JSX.Element => {
-  const roomId = 38924;
-  const startTarget = "対消滅";
-  const goalTarget = undefined;
+  const roomId = useRecoilValue(roomIdAtom);
+  const { users, isReady, start, goal } = useRoomData(open, roomId);
+  const [startTarget, setStartTarget] = useState<string | undefined>(undefined);
+  const [goalTarget, setGoalTarget] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (!start) return;
+    setStartTarget(extractTitleFromURL(start));
+  }, [start]);
+
+  useEffect(() => {
+    if (!goal) return;
+    setGoalTarget(extractTitleFromURL(goal));
+  }, [goal]);
 
   return (
     <DialogBase
@@ -56,7 +74,7 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
           <TargetArticle target={goalTarget} startOrGoal="goal" />
         </Stack>
       </TargetContainer>
-      <UserList users={dummyUserList} />
+      <UserList users={users} />
     </DialogBase>
   );
 };

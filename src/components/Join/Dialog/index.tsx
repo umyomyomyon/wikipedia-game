@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 
 // mui
 import Typography from "@mui/material/Typography";
@@ -16,6 +16,7 @@ import {
   userName as userNameAtom,
   userUuid as userUuidAtom,
 } from "../../../recoil/atoms/user";
+import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
 
 import { joinRoom } from "../../../utils/room";
 import { validateRoomId } from "../../../utils/validations";
@@ -23,13 +24,15 @@ import { validateRoomId } from "../../../utils/validations";
 interface JoinDialogProps {
   open: boolean;
   handleClose: () => void;
+  handleOpenWaitDialog: () => void;
 }
 
 export const JoinDialog: React.FC<JoinDialogProps> = ({
   open,
   handleClose,
+  handleOpenWaitDialog,
 }): JSX.Element => {
-  const [roomId, setRoomId] = useState<number | undefined>(undefined);
+  const [roomId, setRoomId] = useRecoilState(roomIdAtom);
   const [roomIdError, setRoomIdError] = useState<boolean>(false);
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const userName = useRecoilValue(userNameAtom);
@@ -50,7 +53,13 @@ export const JoinDialog: React.FC<JoinDialogProps> = ({
 
     try {
       setIsFetching(true);
-      joinRoom(roomId, userUuid, userName);
+      joinRoom(roomId, userUuid, userName).then((result) => {
+        if (result) {
+          setRoomId(result);
+          handleOpenWaitDialog();
+          handleClose();
+        }
+      });
     } catch {
       // バックエンドとの通信が失敗した場合の処理
       console.error("error in handleClick at JoinDialog.");

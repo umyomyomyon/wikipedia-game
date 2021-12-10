@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from rooms import create_room_id, init_room, destroy_room, _join_room
+from rooms import create_room_id, init_room, destroy_room, _join_room, setting_article
 from exceptions import RoomNotExistException, RoomIdDuplicateException
 from conf import CORS_WHITELIST
 
@@ -46,6 +46,20 @@ def join_room():
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
         return jsonify({'message': 'join room failed.'}), 400
+
+
+@app.route('/room/articles', methods=['POST'])
+def set_article():
+    try:
+        data = request.get_json()
+        room_id, target, url = data['room_id'], data['target'], data['url']
+        is_start = True if target == 'start' else False
+        setting_article(room_id, url, is_start)
+        return jsonify(), 201
+    except RoomNotExistException as e:
+        return jsonify({'message': e.message}), e.status_code
+    except Exception as e:
+        return jsonify({'message': 'set_article failed.'}), 400
 
 
 if __name__ == '__main__':

@@ -51,3 +51,24 @@ export const joinRoom = async (
     console.error("error occurred in joinRoom().");
   }
 };
+
+export const setStartOrGoalArticle = async (
+  roomId: number,
+  articleUrl: string,
+  startOrGoal: "start" | "goal"
+): Promise<void> => {
+  const url = `${cloudrunUrl}/room/articles`;
+  try {
+    await axios.post<{
+      roomId: number;
+      target: string;
+      url: string;
+    }>(url, {
+      room_id: roomId,
+      target: startOrGoal,
+      url: articleUrl,
+    });
+  } catch {
+    console.log("error occurred in setStartOrGoalArticle.");
+  }
+};

@@ -12,7 +12,10 @@ import {
 import { roomId as roomIdAtom } from "../recoil/atoms/room";
 
 import { createRoom, arrangeUsers } from "../utils/room";
+
+// types
 import { UserData } from "../types/user";
+import { RoomData } from "../types/room";
 
 const useCreateRoom = (open: boolean): void => {
   const setRoomId = useSetRecoilState(roomIdAtom);
@@ -29,11 +32,11 @@ const useCreateRoom = (open: boolean): void => {
   }, [open]);
 };
 
-const useRoomUsers = (
-  open: boolean,
-  roomId: number | undefined
-): UserData[] => {
+const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
   const [users, setUsers] = useState<UserData[]>([]);
+  const [isReady, setIsReady] = useState<boolean>(false);
+  const [start, setStart] = useState<string | undefined>(undefined);
+  const [goal, setGoal] = useState<string | undefined>(undefined);
   const userUuid = useRecoilValue(userUuidAtom);
 
   useEffect(() => {
@@ -44,6 +47,9 @@ const useRoomUsers = (
       if (data) {
         const arrangedUsers = arrangeUsers(data.users);
         setUsers(arrangedUsers);
+        setIsReady(data.isReady);
+        setStart(data.start);
+        setGoal(data.goal);
       }
     });
 
@@ -51,7 +57,7 @@ const useRoomUsers = (
     onDisconnect(userRef).remove();
   }, [open, roomId]);
 
-  return users;
+  return { users, isReady, start, goal };
 };
 
-export { useCreateRoom, useRoomUsers };
+export { useCreateRoom, useRoomData };

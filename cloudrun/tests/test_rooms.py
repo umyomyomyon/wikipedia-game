@@ -1,7 +1,7 @@
 import pytest
 from firebase_admin import db
 
-from rooms import check_room_exists, init_room, destroy_room, _join_room
+from rooms import check_room_exists, init_room, destroy_room, _join_room, setting_article
 from exceptions import RoomNotExistException
 
 
@@ -78,3 +78,47 @@ def test_join_room_failed():
         user_uuid = 'test_user_uuid'
         user_name = 'test_user_name'
         _join_room(room_id, user_uuid, user_name)
+
+
+@room_decorator(30000)
+def test_setting_start_article():
+    room_id = 30000
+    url = 'https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9E'
+    is_start = True
+    setting_article(room_id, url, is_start)
+
+    ref = db.reference(f'{room_id}/')
+    data = ref.get()
+    assert data == {
+        'isReady': False,
+        'users': {
+            'test_user_uuid': 'test_user_name'
+        },
+        'start': url
+    }
+
+
+@room_decorator(40000)
+def test_setting_goal_article():
+    room_id = 40000
+    url = 'https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9E'
+    is_start = False
+    setting_article(room_id, url, is_start)
+
+    ref = db.reference(f'{room_id}/')
+    data = ref.get()
+    assert data == {
+        'isReady': False,
+        'users': {
+            'test_user_uuid': 'test_user_name'
+        },
+        'goal': url
+    }
+
+
+def test_setting_article_failed():
+    with pytest.raises(RoomNotExistException):
+        room_id = 33333
+        url = 'https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9E'
+        is_start = True
+        setting_article(room_id, url, is_start)

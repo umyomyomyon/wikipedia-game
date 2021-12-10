@@ -15,7 +15,7 @@ import { UserList } from "../../general/UserList";
 // atoms
 import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
 
-import { useCreateRoom, useRoomUsers } from "../../../hooks/firebase";
+import { useCreateRoom, useRoomData } from "../../../hooks/firebase";
 
 const StyledTypography = styled(Typography)({
   fontWeight: "bold",
@@ -34,7 +34,7 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
   const roomId = useRecoilValue(roomIdAtom);
 
   useCreateRoom(open);
-  const users = useRoomUsers(open, roomId);
+  const { users } = useRoomData(open, roomId);
 
   const wrappedHandleClose = () => {
     handleClose();
