@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 // mui
 import { styled } from "@mui/system";
@@ -65,15 +65,13 @@ export const StartGoalSettings: React.FC = (): JSX.Element => {
   useEffect(() => {
     if (!roomId) return;
     if (!startURL) return;
-    if (!startURLTitle) return;
-    setStartOrGoalArticle(roomId, startURL, startURLTitle, "start");
+    setStartOrGoalArticle(roomId, startURL, "start");
   }, [startURLTitle]);
 
   useEffect(() => {
     if (!roomId) return;
     if (!goalURL) return;
-    if (!goalURLTitle) return;
-    setStartOrGoalArticle(roomId, goalURL, goalURLTitle, "goal");
+    setStartOrGoalArticle(roomId, goalURL, "goal");
   }, [goalURLTitle]);
 
   const handleCancelClick = (startOrGoal: "start" | "goal") => () => {

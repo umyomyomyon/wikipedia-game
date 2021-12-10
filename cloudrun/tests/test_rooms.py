@@ -84,9 +84,8 @@ def test_join_room_failed():
 def test_setting_start_article():
     room_id = 30000
     url = 'https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9E'
-    title = 'プログラミング言語'
     is_start = True
-    setting_article(room_id, url, title, is_start)
+    setting_article(room_id, url, is_start)
 
     ref = db.reference(f'{room_id}/')
     data = ref.get()
@@ -95,10 +94,7 @@ def test_setting_start_article():
         'users': {
             'test_user_uuid': 'test_user_name'
         },
-        'start': {
-            'url': url,
-            'title': title
-        }
+        'start': url
     }
 
 
@@ -106,9 +102,8 @@ def test_setting_start_article():
 def test_setting_goal_article():
     room_id = 40000
     url = 'https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9E'
-    title = 'プログラミング言語'
     is_start = False
-    setting_article(room_id, url, title, is_start)
+    setting_article(room_id, url, is_start)
 
     ref = db.reference(f'{room_id}/')
     data = ref.get()
@@ -117,10 +112,7 @@ def test_setting_goal_article():
         'users': {
             'test_user_uuid': 'test_user_name'
         },
-        'goal': {
-            'url': url,
-            'title': title
-        }
+        'goal': url
     }
 
 
@@ -128,6 +120,5 @@ def test_setting_article_failed():
     with pytest.raises(RoomNotExistException):
         room_id = 33333
         url = 'https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9E'
-        title = 'プログラミング言語'
         is_start = True
-        setting_article(room_id, url, title, is_start)
+        setting_article(room_id, url, is_start)

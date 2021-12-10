@@ -52,9 +52,9 @@ def join_room():
 def set_article():
     try:
         data = request.get_json()
-        room_id, target, url, title = data['room_id'], data['target'], data['url'], data['title']
+        room_id, target, url = data['room_id'], data['target'], data['url']
         is_start = True if target == 'start' else False
-        setting_article(room_id, url, title, is_start)
+        setting_article(room_id, url, is_start)
         return jsonify(), 201
     except RoomNotExistException as e:
         return jsonify({'message': e.message}), e.status_code

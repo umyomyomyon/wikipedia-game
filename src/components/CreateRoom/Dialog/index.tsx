@@ -34,7 +34,7 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
   const roomId = useRecoilValue(roomIdAtom);
 
   useCreateRoom(open);
-  const users = useRoomData(open, roomId);
+  const { users } = useRoomData(open, roomId);
 
   const wrappedHandleClose = () => {
     handleClose();
