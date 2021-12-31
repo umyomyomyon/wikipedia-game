@@ -4,7 +4,6 @@ import { RecoilRoot } from "recoil";
 
 // pages
 import { Top } from "./pages/Top";
-import { Game } from "./pages/Game";
 
 const App: React.FC = (): JSX.Element => {
   return (
@@ -14,9 +13,9 @@ const App: React.FC = (): JSX.Element => {
           <Route exact path="/">
             <Top />
           </Route>
-          <Route exact path="/main">
-            <Game />
-          </Route>
+          {/* <Route exact path="/results">
+            <Results />
+          </Route> */}
         </Switch>
       </Router>
     </RecoilRoot>

@@ -34,7 +34,7 @@ export const DialogBase: React.FC<DialogBaseProps> = ({
       </DialogTitle>
       <DialogContent sx={contentSx}>{children}</DialogContent>
       {dialogActions && <Divider />}
-      {dialogActions && dialogActions}
+      {dialogActions}
     </Dialog>
   );
 };
