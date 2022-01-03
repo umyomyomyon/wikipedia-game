@@ -13,7 +13,10 @@ def test_init_room():
     expected_data = {
         'isReady': False,
         'users': {
-            user_uuid: user_name
+            user_uuid: {
+                'name': user_name,
+                'isDone': False
+            }
         }
     }
 
@@ -65,11 +68,15 @@ def test_join_room():
     room_id = 20000
     user_uuid = 'join_user_uuid'
     user_name = 'join_user_name'
+    expected_data = {
+        'name': user_name,
+        'isDone': False
+    }
     _join_room(room_id, user_uuid, user_name)
 
     ref = db.reference(f'{room_id}/users/{user_uuid}/')
-    registered_user_name = ref.get()
-    assert registered_user_name == user_name
+    result = ref.get()
+    assert result == expected_data
 
 
 def test_join_room_failed():
@@ -92,7 +99,10 @@ def test_setting_start_article():
     assert data == {
         'isReady': False,
         'users': {
-            'test_user_uuid': 'test_user_name'
+            'test_user_uuid': {
+                'name': 'test_user_name',
+                'isDone': False
+            }
         },
         'start': url
     }
@@ -110,7 +120,10 @@ def test_setting_goal_article():
     assert data == {
         'isReady': False,
         'users': {
-            'test_user_uuid': 'test_user_name'
+            'test_user_uuid': {
+                'name': 'test_user_name',
+                'isDone': False
+            }
         },
         'goal': url
     }

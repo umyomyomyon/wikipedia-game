@@ -41,7 +41,10 @@ def init_room(room_id: int, user_uuid: str, user_name: str):
     ref.set({
         'isReady': False,
         'users': {
-            user_uuid: user_name
+            user_uuid: {
+                'name': user_name,
+                'isDone': False
+            }
         }
     })
 
@@ -52,7 +55,7 @@ def _join_room(room_id: int, user_uuid: str, user_name: str):
         raise RoomNotExistException
     room_users_ref = db.reference(f'{room_id}/users/')
     current_users = room_users_ref.get()
-    room_users_ref.set(current_users | {user_uuid: user_name})
+    room_users_ref.set(current_users | {user_uuid: {'name': user_name, 'isDone': False}})
 
 
 def destroy_room(room_id: int):
