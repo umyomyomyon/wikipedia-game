@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // types
-import { UserData } from "../types/user";
+import { UserData, UserObj } from "../types/user";
 
 import { cloudrunUrl } from "../conf";
 
@@ -21,14 +21,13 @@ export const createRoom = async (
   }
 };
 
-export const arrangeUsers = (
-  usersObj: { [uuid: string]: string } | null
-): UserData[] => {
+export const arrangeUsers = (usersObj: UserObj | null): UserData[] => {
   if (!usersObj) return [];
   const arrangedUsers: UserData[] = Object.entries(usersObj).map(
-    ([uuid, name]) => ({
+    ([uuid, { name, isDone }]) => ({
       uuid,
       name,
+      isDone,
     })
   );
   return arrangedUsers;

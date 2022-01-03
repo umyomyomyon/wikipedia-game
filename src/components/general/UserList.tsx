@@ -16,12 +16,25 @@ interface UserListProps {
 }
 
 export const dummyUserList: UserData[] = [
-  { uuid: "edd730ad-67c8-4fa1-ab3e-8ac2fbb6e77d", name: "†卍メシア卍†" },
-  { uuid: "c85a939d-18e2-45d3-b3b0-39a31d130e45", name: "test-user-desu" },
-  { uuid: "d94bef0b-95e9-4944-b19b-c477f10e1a83", name: "wikipedia-game-man" },
+  {
+    uuid: "edd730ad-67c8-4fa1-ab3e-8ac2fbb6e77d",
+    name: "†卍メシア卍†",
+    isDone: false,
+  },
+  {
+    uuid: "c85a939d-18e2-45d3-b3b0-39a31d130e45",
+    name: "test-user-desu",
+    isDone: false,
+  },
+  {
+    uuid: "d94bef0b-95e9-4944-b19b-c477f10e1a83",
+    name: "wikipedia-game-man",
+    isDone: false,
+  },
   {
     uuid: "55d1fba2-798e-420a-8d62-64d64632b66c",
     name: "aaaaaaaaaaaaaaaaaaaaaaaaa",
+    isDone: false,
   },
 ];
 
