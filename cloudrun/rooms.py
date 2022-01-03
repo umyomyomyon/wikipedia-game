@@ -69,3 +69,12 @@ def setting_article(room_id: int, url: str, is_start: bool):
     target = 'start' if is_start else 'goal'
     ref = db.reference(f'{room_id}/{target}/')
     ref.set(url)
+
+
+def get_room_data(room_id: int):
+    db_path = f'{room_id}/'
+    ref = db.reference(db_path)
+    data = ref.get()
+    if data is None:
+        raise RoomNotExistException
+    return data
