@@ -1,8 +1,9 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from rooms import create_room_id, init_room, destroy_room, _join_room, setting_article
-from exceptions import RoomNotExistException, RoomIdDuplicateException
+from rooms import create_room_id, init_room, destroy_room, _join_room, setting_article, get_room_data
+from validation import validate_urls
+from exceptions import RoomNotExistException, RoomIdDuplicateException, URLValidationException
 from conf import CORS_WHITELIST
 
 app = Flask(__name__)
@@ -60,6 +61,22 @@ def set_article():
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
         return jsonify({'message': 'set_article failed.'}), 400
+
+
+@app.route('/room/done', methods=['POST'])
+def done():
+    try:
+        data = request.get_json()
+        room_id, urls = data['room_id'], data['urls']
+        room_data = get_room_data(room_id)
+        validate_urls(room_data['start'], urls, room_data['goal'])
+        return jsonify({'message': 'urls is valid.'}), 200
+    except RoomNotExistException as e:
+        return jsonify({'message': e.message}), e.status_code
+    except URLValidationException as e:
+        return jsonify({'message': e.message}), e.status_code
+    except Exception as e:
+        return jsonify({'message': 'validation error.'}), 400
 
 
 if __name__ == '__main__':
