@@ -52,17 +52,10 @@ def get_all_player_progresses(room_id: int):
     return progresses
 
 
-def get_room_user_uuids(rtdb_users):
-    uuids = []
-    for uuid in rtdb_users.keys():
-        uuids.append(uuid)
-    return uuids
-
-
 def record_game_result(room_id: int):
     room_data = get_room_data(room_id)
     start, goal, rtdb_users = room_data.get('start'), room_data.get('goal'), room_data.get('users')
-    in_room_user_uuids = get_room_user_uuids(rtdb_users)
+    in_room_user_uuids = [uuid for uuid in rtdb_users.keys()]
 
     # firestoreのplayer progressを全て取得
     player_progresses = get_all_player_progresses(room_id)

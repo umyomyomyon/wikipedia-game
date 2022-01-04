@@ -3,8 +3,8 @@ import pytest
 from firebase_admin import db
 
 from rooms import setting_article, destroy_room
-from firestore import (delete_all_document_in_collection, get_room_user_uuids, record_player_progress,
-                       get_all_player_progresses, record_game_result)
+from firestore import (delete_all_document_in_collection, record_player_progress, get_all_player_progresses,
+                       record_game_result)
 from conf import fs
 
 
@@ -58,21 +58,6 @@ def test_get_all_player_progresses():
     ]
     fs.collection('progress').document(str(room_id)).collection('users').document(uuid).delete()
     fs.collection('progress').document(str(room_id)).collection('users').document(uuid2).delete()
-
-
-def test_get_room_user_uuids():
-    rtdb_users = {
-        'user-uuid': {
-            'name': 'user-name',
-            'isDone': True
-        },
-        'user-uuid2': {
-            'name': 'user-name2',
-            'isDone': True
-        }
-    }
-    results = get_room_user_uuids(rtdb_users)
-    assert results == ['user-uuid', 'user-uuid2']
 
 
 def test_record_game_result():
