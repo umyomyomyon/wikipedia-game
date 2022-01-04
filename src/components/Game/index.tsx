@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import { Target } from "./Target";
 import { UrlList } from "./Lists/URLList";
 import { URLField } from "./Forms/URLField";
+import { UserList } from "./Lists/UserList";
 
 import { UserData } from "../../types/user";
 import { dummyUserList } from "../general/UserList";
@@ -30,7 +31,7 @@ const _useRoomData = (): {
   goal: string;
 } => {
   return {
-    users: [],
+    users: dummyUserList,
     isReady: true,
     start: "https://ja.wikipedia.org/wiki/World_Wide_Web",
     goal: "https://ja.wikipedia.org/wiki/%E5%8B%95%E7%9A%84%E8%A8%88%E7%94%BB%E6%B3%95",
@@ -39,7 +40,6 @@ const _useRoomData = (): {
 
 export const GameContent: React.FC = (): JSX.Element => {
   const { users, start, goal } = _useRoomData();
-  const [userList, setUserList] = useState<UserData[]>(dummyUserList);
   const [url, setUrl] = useState<string>("");
   const [urlError, setURLError] = useState<boolean>(false);
   const [urls, setUrls] = useState<string[]>([]);
@@ -83,36 +83,39 @@ export const GameContent: React.FC = (): JSX.Element => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ height: "100vh", position: "relative" }}>
-      <Wrapper>
-        <Target startOrGoal="start" url={start} />
-        <UrlList urls={urls} />
-        <URLField
-          url={url}
-          error={urlError}
-          handleChange={handleChange}
-          handleClick={handleDoneClick}
-          handleReturnClick={handleReturnClick}
-          handleFocus={handleFocus}
-        />
-        <Target startOrGoal="goal" url={goal} />
-      </Wrapper>
-      <Button
-        color="primary"
-        variant="contained"
-        fullWidth
-        disabled={urls.length === 0}
-        sx={{
-          position: "absolute",
-          maxWidth: 300,
-          left: 0,
-          right: 0,
-          bottom: 20,
-          margin: "auto",
-        }}
-      >
-        <Typography sx={{ fontWeight: "bold" }}>DONE</Typography>
-      </Button>
-    </Container>
+    <React.Fragment>
+      <UserList users={users} />
+      <Container maxWidth="sm" sx={{ height: "100vh", position: "relative" }}>
+        <Wrapper>
+          <Target startOrGoal="start" url={start} />
+          <UrlList urls={urls} />
+          <URLField
+            url={url}
+            error={urlError}
+            handleChange={handleChange}
+            handleClick={handleDoneClick}
+            handleReturnClick={handleReturnClick}
+            handleFocus={handleFocus}
+          />
+          <Target startOrGoal="goal" url={goal} />
+        </Wrapper>
+        <Button
+          color="primary"
+          variant="contained"
+          fullWidth
+          disabled={urls.length === 0}
+          sx={{
+            position: "absolute",
+            maxWidth: 300,
+            left: 0,
+            right: 0,
+            bottom: 20,
+            margin: "auto",
+          }}
+        >
+          <Typography sx={{ fontWeight: "bold" }}>DONE</Typography>
+        </Button>
+      </Container>
+    </React.Fragment>
   );
 };
