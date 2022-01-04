@@ -1,17 +1,9 @@
 from random import randint
 
-import firebase_admin
-from firebase_admin import credentials
 from firebase_admin import db
 
 from exceptions import RoomIdDuplicateException, RoomNotExistException
-from conf import FIREBASE_CRED_PATH, RTDB_URL, MIN_ROOM_ID, MAX_ROOM_ID
-
-cred = credentials.Certificate(FIREBASE_CRED_PATH)
-
-firebase_admin.initialize_app(cred, {
-    'databaseURL': RTDB_URL
-})
+from conf import MIN_ROOM_ID, MAX_ROOM_ID
 
 
 def check_room_exists(room_id: int, return_ref=False):
@@ -81,3 +73,13 @@ def get_room_data(room_id: int):
     if data is None:
         raise RoomNotExistException
     return data
+
+
+def change_player_progress(room_id: int, uuid: str):
+    is_room_exists = check_room_exists(room_id)
+    if not is_room_exists:
+        raise RoomNotExistException
+    ref = db.reference(f'{room_id}/users/{uuid}/')
+    player_data = ref.get()
+    player_data['isDone'] = True
+    ref.set(player_data)
