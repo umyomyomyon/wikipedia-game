@@ -1,7 +1,7 @@
 import pytest
 from firebase_admin import db
 
-from rooms import check_room_exists, init_room, destroy_room, _join_room, setting_article
+from rooms import check_room_exists, init_room, destroy_room, _join_room, setting_article, change_player_progress
 from exceptions import RoomNotExistException
 
 
@@ -52,7 +52,9 @@ def room_decorator(room_id):
             init_room(_room_id, user_uuid, user_name)
             f(*args, **kwargs)
             destroy_room(_room_id)
+
         return _wrapper
+
     return _room_decorator
 
 
@@ -135,3 +137,18 @@ def test_setting_article_failed():
         url = 'https://ja.wikipedia.org/wiki/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9E'
         is_start = True
         setting_article(room_id, url, is_start)
+
+
+@room_decorator(50000)
+def test_change_player_progress():
+    room_id = 50000
+    user_uuid = 'test_user_uuid'
+    user_name = 'test_user_name'
+    expected_data = {
+        'name': user_name,
+        'isDone': True
+    }
+    change_player_progress(room_id, user_uuid)
+
+    result = db.reference(f'{room_id}/users/{user_uuid}/').get()
+    assert result == expected_data

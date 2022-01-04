@@ -1,7 +1,8 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from rooms import create_room_id, init_room, destroy_room, _join_room, setting_article, get_room_data
+from rooms import (create_room_id, init_room, destroy_room, _join_room, setting_article, get_room_data,
+                   change_player_progress)
 from validation import validate_urls
 from exceptions import RoomNotExistException, RoomIdDuplicateException, URLValidationException
 from conf import CORS_WHITELIST
@@ -67,9 +68,8 @@ def set_article():
 def done():
     try:
         data = request.get_json()
-        room_id, urls = data['room_id'], data['urls']
-        room_data = get_room_data(room_id)
-        validate_urls(room_data['start'], urls, room_data['goal'])
+        room_id, urls, user_uuid = data['room_id'], data['urls'], data['uuid']
+        change_player_progress(room_id, user_uuid)
         return jsonify({'message': 'urls is valid.'}), 200
     except RoomNotExistException as e:
         return jsonify({'message': e.message}), e.status_code
