@@ -91,11 +91,11 @@ def setting_article(room_id: int, url: str, is_start: bool):
     ref.set(url)
 
 
-def change_player_progress(room_id: int, uuid: str):
+def change_player_progress(room_id: int, uuid: str, is_done: bool):
     is_room_exists = check_room_exists(room_id)
     if not is_room_exists:
         raise RoomNotExistException
     ref = db.reference(f'{room_id}/users/{uuid}/')
     player_data = ref.get()
-    player_data['isDone'] = True
+    player_data['isDone'] = is_done
     ref.set(player_data)

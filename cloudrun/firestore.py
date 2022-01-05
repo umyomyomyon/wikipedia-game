@@ -42,6 +42,11 @@ def record_player_progress(room_id: int, uuid: str, name: str, urls: List[str]):
     })
 
 
+def cancel_player_progress(room_id: int, uuid: str):
+    ref = fs.collection('progress').document(str(room_id)).collection('users').document(uuid)
+    ref.delete()
+
+
 def get_all_player_progresses(room_id: int):
     ref = fs.collection('progress').document(str(room_id)).collection('users')
     docs = ref.stream()

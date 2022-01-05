@@ -4,24 +4,24 @@ import { useRecoilValue } from "recoil";
 // mui
 import { styled } from "@mui/system";
 import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 
 // components
 import { Target } from "./Target";
 import { UrlList } from "./Lists/URLList";
 import { URLField } from "./Forms/URLField";
 import { UserList } from "./Lists/UserList";
+import { DoneButton } from "./Buttons/DoneButton";
 
-// types
-import { UserData } from "../../types/user";
-
-import { dummyUserList } from "../general/UserList";
 import { validateWikipediaUrl } from "../../utils/validations";
 import { useRoomData } from "../../hooks/firebase";
+import { done } from "../../utils/room";
 
 //atoms
 import { roomId as roomIdAtom } from "../../recoil/atoms/room";
+import {
+  userUuid as userUuidAtom,
+  userName as userNameAtom,
+} from "../../recoil/atoms/user";
 
 const Wrapper = styled("div")({
   height: "100%",
@@ -31,26 +31,15 @@ const Wrapper = styled("div")({
   flexDirection: "column",
 });
 
-const _useRoomData = (): {
-  users: UserData[];
-  isReady: boolean;
-  start: string;
-  goal: string;
-} => {
-  return {
-    users: dummyUserList,
-    isReady: true,
-    start: "https://ja.wikipedia.org/wiki/World_Wide_Web",
-    goal: "https://ja.wikipedia.org/wiki/%E5%8B%95%E7%9A%84%E8%A8%88%E7%94%BB%E6%B3%95",
-  };
-};
-
 export const GameContent: React.FC = (): JSX.Element => {
   const roomId = useRecoilValue(roomIdAtom);
+  const userUuid = useRecoilValue(userUuidAtom);
+  const userName = useRecoilValue(userNameAtom);
   const { users, start, goal } = useRoomData(true, roomId);
   const [url, setUrl] = useState<string>("");
   const [urlError, setURLError] = useState<boolean>(false);
   const [urls, setUrls] = useState<string[]>([]);
+  const [isDone, setIsDone] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(e.currentTarget.value);
@@ -90,6 +79,16 @@ export const GameContent: React.FC = (): JSX.Element => {
     setURLError(false);
   };
 
+  const handleDone = () => {
+    if (!roomId || !userUuid) return;
+    done(roomId, userUuid, true, urls, userName).then(() => setIsDone(true));
+  };
+
+  const handleCancel = () => {
+    if (!roomId || !userUuid) return;
+    done(roomId, userUuid, false).then(() => setIsDone(false));
+  };
+
   return (
     <React.Fragment>
       <UserList users={users} />
@@ -107,22 +106,12 @@ export const GameContent: React.FC = (): JSX.Element => {
           />
           {goal && <Target startOrGoal="goal" url={goal} />}
         </Wrapper>
-        <Button
-          color="primary"
-          variant="contained"
-          fullWidth
-          disabled={urls.length === 0}
-          sx={{
-            position: "absolute",
-            maxWidth: 300,
-            left: 0,
-            right: 0,
-            bottom: 20,
-            margin: "auto",
-          }}
-        >
-          <Typography sx={{ fontWeight: "bold" }}>DONE</Typography>
-        </Button>
+        <DoneButton
+          disabled={false}
+          isDone={isDone}
+          handleDone={handleDone}
+          handleCancel={handleCancel}
+        />
       </Container>
     </React.Fragment>
   );

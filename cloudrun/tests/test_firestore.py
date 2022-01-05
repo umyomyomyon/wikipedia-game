@@ -4,7 +4,7 @@ from firebase_admin import db
 
 from rooms import setting_article, destroy_room
 from firestore import (delete_all_document_in_collection, record_player_progress, get_all_player_progresses,
-                       record_game_result)
+                       record_game_result, cancel_player_progress)
 from conf import fs
 
 
@@ -36,6 +36,18 @@ def test_record_player_progress():
     doc = target_ref.get()
     assert doc.to_dict() == expected_data
     target_ref.delete()
+
+
+def test_cancel_player_progress():
+    room_id = 98764
+    uuid = 'test-user-uuid'
+    name = 'test-user-name'
+    urls = ['url1', 'url2']
+    record_player_progress(room_id, uuid, name, urls)
+
+    cancel_player_progress(room_id, uuid)
+    target_ref = fs.collection('progress').document(str(room_id)).collection('users').document(uuid)
+    assert target_ref.get().exists is False
 
 
 def test_get_all_player_progresses():

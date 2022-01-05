@@ -86,3 +86,24 @@ export const startRoom = async (
     console.error("error in startRoom.");
   }
 };
+
+export const done = async (
+  roomId: number,
+  uuid: string,
+  isDone: boolean,
+  urls?: string[],
+  name?: string
+): Promise<void> => {
+  const url = `${cloudrunUrl}/room/player-progress`;
+  try {
+    await axios.post<void>(url, {
+      room_id: roomId,
+      urls,
+      uuid,
+      name,
+      is_done: isDone,
+    });
+  } catch {
+    console.error("error in done.");
+  }
+};
