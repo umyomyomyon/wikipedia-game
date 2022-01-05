@@ -3,6 +3,7 @@ from flask_cors import CORS
 
 from rooms import (create_room_id, init_room, destroy_room, _join_room, setting_article, _start_room,
                    change_player_progress)
+from firestore import record_player_progress, cancel_player_progress
 from validation import validate_urls
 from exceptions import RoomNotExistException, RoomIdDuplicateException, URLValidationException, NotInRoomUserException
 from conf import CORS_WHITELIST
@@ -79,12 +80,18 @@ def set_article():
         return jsonify({'message': 'set_article failed.'}), 400
 
 
-@app.route('/room/done', methods=['POST'])
+@app.route('/room/player-progress', methods=['POST'])
 def done():
+    # required request params: room_id, user_uuid, is_done
     try:
         data = request.get_json()
-        room_id, urls, user_uuid = data['room_id'], data['urls'], data['uuid']
-        change_player_progress(room_id, user_uuid)
+        room_id, urls, user_uuid, name, is_done \
+            = data.get('room_id'), data.get('urls'), data.get('uuid'), data.get('name'), data.get('is_done')
+        change_player_progress(room_id, user_uuid, is_done)
+        if is_done:
+            record_player_progress(room_id, user_uuid, name, urls)
+        else:
+            cancel_player_progress(room_id, user_uuid)
         return jsonify({'message': 'urls is valid.'}), 200
     except RoomNotExistException as e:
         return jsonify({'message': e.message}), e.status_code

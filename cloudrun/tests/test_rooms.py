@@ -168,11 +168,12 @@ def test_change_player_progress():
     room_id = 50000
     user_uuid = 'test_user_uuid'
     user_name = 'test_user_name'
+    is_done = True
     expected_data = {
         'name': user_name,
         'isDone': True
     }
-    change_player_progress(room_id, user_uuid)
+    change_player_progress(room_id, user_uuid, is_done)
 
     result = db.reference(f'{room_id}/users/{user_uuid}/').get()
     assert result == expected_data
