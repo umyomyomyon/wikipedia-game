@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from rooms import (create_room_id, init_room, destroy_room, _join_room, setting_article, get_room_data,
+from rooms import (create_room_id, init_room, destroy_room, _join_room, setting_article, _start_room,
                    change_player_progress)
 from validation import validate_urls
-from exceptions import RoomNotExistException, RoomIdDuplicateException, URLValidationException
+from exceptions import RoomNotExistException, RoomIdDuplicateException, URLValidationException, NotInRoomUserException
 from conf import CORS_WHITELIST
 
 app = Flask(__name__)
@@ -23,6 +23,21 @@ def create_room():
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
         return jsonify({'message': 'create_room failed.'}), 400
+
+
+@app.route('/room/start', methods=['POST'])
+def start_room():
+    try:
+        data = request.get_json()
+        user_uuid, room_id = data['uuid'], data['room_id']
+        _start_room(room_id, user_uuid)
+        return jsonify({'message': 'game started.'}), 200
+    except RoomNotExistException as e:
+        return jsonify({'message': e.message}), e.status_code
+    except NotInRoomUserException as e:
+        return jsonify({'message': e.message}), e.status_code
+    except Exception as e:
+        return jsonify({'message': 'game start failed.'}), 400
 
 
 @app.route('/room', methods=['DELETE'])

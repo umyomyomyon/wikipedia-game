@@ -14,3 +14,8 @@ class URLValidationException(Exception):
 
     def __init__(self, parent_url, child_url):
         self.message = f'{child_url}は{parent_url}からたどれません'
+
+
+class NotInRoomUserException(Exception):
+    status_code = 403
+    message = '参加中のユーザー以外にこの操作は許可されていません'

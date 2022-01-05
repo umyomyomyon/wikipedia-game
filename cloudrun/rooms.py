@@ -2,8 +2,8 @@ from random import randint
 
 from firebase_admin import db
 
-from exceptions import RoomIdDuplicateException, RoomNotExistException
-from conf import MIN_ROOM_ID, MAX_ROOM_ID
+from exceptions import RoomIdDuplicateException, RoomNotExistException, NotInRoomUserException
+from conf import MIN_ROOM_ID, MAX_ROOM_ID, RoomStatuses
 
 
 def check_room_exists(room_id: int, return_ref=False):
@@ -28,10 +28,20 @@ def create_room_id():
     return room_id
 
 
+def get_room_data(room_id: int):
+    db_path = f'{room_id}/'
+    ref = db.reference(db_path)
+    data = ref.get()
+    if data is None:
+        raise RoomNotExistException
+    return data
+
+
 def init_room(room_id: int, user_uuid: str, user_name: str):
     ref = db.reference(f'{room_id}/')
     ref.set({
         'isReady': False,
+        'status': RoomStatuses.PREPARATION,
         'users': {
             user_uuid: {
                 'name': user_name,
@@ -50,6 +60,21 @@ def _join_room(room_id: int, user_uuid: str, user_name: str):
     room_users_ref.set(current_users | {user_uuid: {'name': user_name, 'isDone': False}})
 
 
+def _start_room(room_id: int, user_uuid: str):
+    is_room_exists, room_ref = check_room_exists(room_id, return_ref=True)
+    if not is_room_exists:
+        raise RoomNotExistException
+
+    room_data = get_room_data(room_id)
+    is_in_room_user_uuid = user_uuid in room_data.get('users').keys()
+    if not is_in_room_user_uuid:
+        raise NotInRoomUserException
+
+    room_ref.update({
+        'status': RoomStatuses.ONGOING
+    })
+
+
 def destroy_room(room_id: int):
     is_exists_room_id, ref = check_room_exists(room_id, return_ref=True)
     if not is_exists_room_id:
@@ -64,15 +89,6 @@ def setting_article(room_id: int, url: str, is_start: bool):
     target = 'start' if is_start else 'goal'
     ref = db.reference(f'{room_id}/{target}/')
     ref.set(url)
-
-
-def get_room_data(room_id: int):
-    db_path = f'{room_id}/'
-    ref = db.reference(db_path)
-    data = ref.get()
-    if data is None:
-        raise RoomNotExistException
-    return data
 
 
 def change_player_progress(room_id: int, uuid: str):

@@ -17,3 +17,9 @@ firebase_admin.initialize_app(cred, {
     'databaseURL': RTDB_URL
 })
 fs = firestore.client()
+
+
+class RoomStatuses:
+    PREPARATION = 'PREPARATION'
+    ONGOING = 'ONGOING'
+    ENDED = 'ENDED'

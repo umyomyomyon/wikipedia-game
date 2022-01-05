@@ -15,7 +15,7 @@ import { createRoom, arrangeUsers } from "../utils/room";
 
 // types
 import { UserData } from "../types/user";
-import { RoomData } from "../types/room";
+import { RoomData, RoomStatus } from "../types/room";
 
 const useCreateRoom = (open: boolean): void => {
   const setRoomId = useSetRecoilState(roomIdAtom);
@@ -35,6 +35,7 @@ const useCreateRoom = (open: boolean): void => {
 const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
   const [users, setUsers] = useState<UserData[]>([]);
   const [isReady, setIsReady] = useState<boolean>(false);
+  const [status, setStatus] = useState<RoomStatus | undefined>(undefined);
   const [start, setStart] = useState<string | undefined>(undefined);
   const [goal, setGoal] = useState<string | undefined>(undefined);
   const userUuid = useRecoilValue(userUuidAtom);
@@ -48,6 +49,7 @@ const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
         const arrangedUsers = arrangeUsers(data.users);
         setUsers(arrangedUsers);
         setIsReady(data.isReady);
+        setStatus(data.status);
         setStart(data.start);
         setGoal(data.goal);
       }
@@ -57,7 +59,7 @@ const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
     onDisconnect(userRef).remove();
   }, [open, roomId]);
 
-  return { users, isReady, start, goal };
+  return { users, isReady, status, start, goal };
 };
 
 export { useCreateRoom, useRoomData };
