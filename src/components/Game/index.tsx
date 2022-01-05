@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
 
 // mui
 import { styled } from "@mui/system";
@@ -12,9 +13,15 @@ import { UrlList } from "./Lists/URLList";
 import { URLField } from "./Forms/URLField";
 import { UserList } from "./Lists/UserList";
 
+// types
 import { UserData } from "../../types/user";
+
 import { dummyUserList } from "../general/UserList";
 import { validateWikipediaUrl } from "../../utils/validations";
+import { useRoomData } from "../../hooks/firebase";
+
+//atoms
+import { roomId as roomIdAtom } from "../../recoil/atoms/room";
 
 const Wrapper = styled("div")({
   height: "100%",
@@ -39,7 +46,8 @@ const _useRoomData = (): {
 };
 
 export const GameContent: React.FC = (): JSX.Element => {
-  const { users, start, goal } = _useRoomData();
+  const roomId = useRecoilValue(roomIdAtom);
+  const { users, start, goal } = useRoomData(true, roomId);
   const [url, setUrl] = useState<string>("");
   const [urlError, setURLError] = useState<boolean>(false);
   const [urls, setUrls] = useState<string[]>([]);
@@ -87,7 +95,7 @@ export const GameContent: React.FC = (): JSX.Element => {
       <UserList users={users} />
       <Container maxWidth="sm" sx={{ height: "100vh", position: "relative" }}>
         <Wrapper>
-          <Target startOrGoal="start" url={start} />
+          {start && <Target startOrGoal="start" url={start} />}
           <UrlList urls={urls} />
           <URLField
             url={url}
@@ -97,7 +105,7 @@ export const GameContent: React.FC = (): JSX.Element => {
             handleReturnClick={handleReturnClick}
             handleFocus={handleFocus}
           />
-          <Target startOrGoal="goal" url={goal} />
+          {goal && <Target startOrGoal="goal" url={goal} />}
         </Wrapper>
         <Button
           color="primary"

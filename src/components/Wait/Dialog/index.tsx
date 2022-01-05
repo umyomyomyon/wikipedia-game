@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 // mui
 import { styled } from "@mui/system";
@@ -14,6 +14,7 @@ import { TargetArticle } from "./TargetArticle";
 
 // atoms
 import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
+import { mode as modeAtom } from "../../../recoil/atoms/mode";
 
 import { useRoomData } from "../../../hooks/firebase";
 import { extractTitleFromURL } from "../../../utils/validations";
@@ -37,7 +38,8 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
   handleClose,
 }): JSX.Element => {
   const roomId = useRecoilValue(roomIdAtom);
-  const { users, isReady, start, goal } = useRoomData(open, roomId);
+  const setMode = useSetRecoilState(modeAtom);
+  const { users, status, start, goal } = useRoomData(open, roomId);
   const [startTarget, setStartTarget] = useState<string | undefined>(undefined);
   const [goalTarget, setGoalTarget] = useState<string | undefined>(undefined);
 
@@ -50,6 +52,13 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
     if (!goal) return;
     setGoalTarget(extractTitleFromURL(goal));
   }, [goal]);
+
+  useEffect(() => {
+    if (status === "ONGOING") {
+      setMode("game");
+      handleClose();
+    }
+  }, [status]);
 
   return (
     <DialogBase

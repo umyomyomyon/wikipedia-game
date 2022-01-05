@@ -13,7 +13,7 @@ import { mode as modeAtom } from "../recoil/atoms/mode";
 import { userNameConfirmed as userNameConfirmedAtom } from "../recoil/atoms/user";
 
 // dev
-import { ModeChangeButton } from "../components/dev";
+import { ModeChangeButton, RoomIdIndicator } from "../components/dev";
 
 export const Top: React.FC = (): JSX.Element => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState<boolean>(false);
@@ -36,6 +36,7 @@ export const Top: React.FC = (): JSX.Element => {
       ) : (
         <GameContent />
       )}
+      <RoomIdIndicator />
       <ModeChangeButton />
       <CreateRoomDialog
         open={isCreateDialogOpen}

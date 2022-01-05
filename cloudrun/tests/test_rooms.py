@@ -1,8 +1,10 @@
 import pytest
 from firebase_admin import db
 
-from rooms import check_room_exists, init_room, destroy_room, _join_room, setting_article, change_player_progress
-from exceptions import RoomNotExistException
+from rooms import (check_room_exists, init_room, destroy_room, _join_room, setting_article, change_player_progress,
+                   _start_room)
+from exceptions import RoomNotExistException, NotInRoomUserException
+from conf import RoomStatuses
 
 
 #  init_room -> destroy_roomの順番でテストを実行すること
@@ -12,6 +14,7 @@ def test_init_room():
     user_name = 'test_user_name'
     expected_data = {
         'isReady': False,
+        'status': RoomStatuses.PREPARATION,
         'users': {
             user_uuid: {
                 'name': user_name,
@@ -89,6 +92,25 @@ def test_join_room_failed():
         _join_room(room_id, user_uuid, user_name)
 
 
+@room_decorator(20002)
+def test_start_room():
+    room_id = 20002
+    user_uuid = 'test_user_uuid'
+    _start_room(room_id, user_uuid)
+
+    ref = db.reference(f'{room_id}/status/')
+    room_status = ref.get()
+    assert room_status == RoomStatuses.ONGOING
+
+
+@room_decorator(20003)
+def test_start_room_failed_not_in_room_user():
+    with pytest.raises(NotInRoomUserException):
+        room_id = 20003
+        not_in_room_user_uuid = 'not'
+        _start_room(room_id, not_in_room_user_uuid)
+
+
 @room_decorator(30000)
 def test_setting_start_article():
     room_id = 30000
@@ -100,6 +122,7 @@ def test_setting_start_article():
     data = ref.get()
     assert data == {
         'isReady': False,
+        'status': RoomStatuses.PREPARATION,
         'users': {
             'test_user_uuid': {
                 'name': 'test_user_name',
@@ -121,6 +144,7 @@ def test_setting_goal_article():
     data = ref.get()
     assert data == {
         'isReady': False,
+        'status': RoomStatuses.PREPARATION,
         'users': {
             'test_user_uuid': {
                 'name': 'test_user_name',

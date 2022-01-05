@@ -68,6 +68,21 @@ export const setStartOrGoalArticle = async (
       url: articleUrl,
     });
   } catch {
-    console.log("error occurred in setStartOrGoalArticle.");
+    console.error("error occurred in setStartOrGoalArticle.");
+  }
+};
+
+export const startRoom = async (
+  uuid: string,
+  roomId: number
+): Promise<void> => {
+  const url = `${cloudrunUrl}/room/start`;
+  try {
+    await axios.post<void>(url, {
+      uuid: uuid,
+      room_id: roomId,
+    });
+  } catch {
+    console.error("error in startRoom.");
   }
 };
