@@ -60,7 +60,7 @@ def _join_room(room_id: int, user_uuid: str, user_name: str):
     room_users_ref.set(current_users | {user_uuid: {'name': user_name, 'isDone': False}})
 
 
-def _start_room(room_id: int, user_uuid: str):
+def change_room_status(room_id: int, user_uuid: str, start=True):
     is_room_exists, room_ref = check_room_exists(room_id, return_ref=True)
     if not is_room_exists:
         raise RoomNotExistException
@@ -70,12 +70,13 @@ def _start_room(room_id: int, user_uuid: str):
     if not is_in_room_user_uuid:
         raise NotInRoomUserException
 
+    next_status = RoomStatuses.ONGOING if start else RoomStatuses.ENDED
     room_ref.update({
-        'status': RoomStatuses.ONGOING
+        'status': next_status
     })
 
 
-def destroy_room(room_id: int):
+def _destroy_room(room_id: int):
     is_exists_room_id, ref = check_room_exists(room_id, return_ref=True)
     if not is_exists_room_id:
         raise RoomNotExistException

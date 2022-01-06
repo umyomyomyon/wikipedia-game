@@ -1,8 +1,8 @@
 import pytest
 from firebase_admin import db
 
-from rooms import (check_room_exists, init_room, destroy_room, _join_room, setting_article, change_player_progress,
-                   _start_room)
+from rooms import (check_room_exists, init_room, _destroy_room, _join_room, setting_article, change_player_progress,
+                   change_room_status)
 from exceptions import RoomNotExistException, NotInRoomUserException
 from conf import RoomStatuses
 
@@ -34,7 +34,7 @@ def test_init_room():
 def test_destroy_room():
     room_id = 12345
     db_path = f'{room_id}/'
-    destroy_room(room_id)
+    _destroy_room(room_id)
     ref = db.reference(db_path)
     assert not bool(ref.get())
 
@@ -42,7 +42,7 @@ def test_destroy_room():
 def test_destroy_room_failed():
     with pytest.raises(RoomNotExistException):
         room_id = 22345
-        destroy_room(room_id)
+        _destroy_room(room_id)
 
 
 def room_decorator(room_id):
@@ -54,7 +54,7 @@ def room_decorator(room_id):
         def _wrapper(*args, **kwargs):
             init_room(_room_id, user_uuid, user_name)
             f(*args, **kwargs)
-            destroy_room(_room_id)
+            _destroy_room(_room_id)
 
         return _wrapper
 
@@ -96,7 +96,7 @@ def test_join_room_failed():
 def test_start_room():
     room_id = 20002
     user_uuid = 'test_user_uuid'
-    _start_room(room_id, user_uuid)
+    change_room_status(room_id, user_uuid, start=True)
 
     ref = db.reference(f'{room_id}/status/')
     room_status = ref.get()
@@ -104,11 +104,22 @@ def test_start_room():
 
 
 @room_decorator(20003)
-def test_start_room_failed_not_in_room_user():
+def test_end_room():
+    room_id = 20003
+    user_uuid = 'test_user_uuid'
+    change_room_status(room_id, user_uuid, start=False)
+
+    ref = db.reference(f'{room_id}/status/')
+    room_status = ref.get()
+    assert room_status == RoomStatuses.ENDED
+
+
+@room_decorator(20004)
+def test_change_room_status_failed_not_in_room_user():
     with pytest.raises(NotInRoomUserException):
-        room_id = 20003
+        room_id = 20004
         not_in_room_user_uuid = 'not'
-        _start_room(room_id, not_in_room_user_uuid)
+        change_room_status(room_id, not_in_room_user_uuid, start=True)
 
 
 @room_decorator(30000)
