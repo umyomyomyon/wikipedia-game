@@ -71,15 +71,16 @@ def _join_room(room_id: int, user_uuid: str, user_name: str):
     room_users_ref.set(current_users | {user_uuid: {'name': user_name, 'isDone': False}})
 
 
-def change_room_status(room_id: int, user_uuid: str, start=True):
+def change_room_status(room_id: int, user_uuid: str, start=True, force_change=False):
     is_room_exists, room_ref = check_room_exists(room_id, return_ref=True)
     if not is_room_exists:
         raise RoomNotExistException
 
-    room_data = get_room_data(room_id)
-    is_host = user_uuid == room_data.get('host')
-    if not is_host:
-        raise NotHostException
+    if not force_change:
+        room_data = get_room_data(room_id)
+        is_host = user_uuid == room_data.get('host')
+        if not is_host:
+            raise NotHostException
 
     next_status = RoomStatuses.ONGOING if start else RoomStatuses.ENDED
     room_ref.update({
@@ -111,3 +112,14 @@ def change_player_progress(room_id: int, uuid: str, is_done: bool):
     player_data = ref.get()
     player_data['isDone'] = is_done
     ref.set(player_data)
+
+
+def get_room_users(room_id: int):
+    ref = db.reference(f'{room_id}/users')
+    rtdb_users = ref.get()
+    return rtdb_users
+
+
+def is_all_room_users_done(rtdb_users):
+    is_done_list = [rtdb_user_data.get('isDone') for rtdb_user_data in rtdb_users.values()]
+    return False not in is_done_list

@@ -1,13 +1,14 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from rooms import (create_room_id, init_room, _destroy_room, _join_room, setting_article, change_room_status,
-                   change_player_progress)
-from firestore import record_player_progress, cancel_player_progress, record_game_result
+from rooms import (create_room_id, init_room, _join_room, setting_article, change_room_status, change_player_progress,
+                   get_room_users, is_all_room_users_done)
+from firestore import (record_player_progress, cancel_player_progress, record_game_result,
+                       delete_all_document_in_collection)
 from validation import validate_urls
 from exceptions import (RoomNotExistException, RoomIdDuplicateException, URLValidationException, NotInRoomUserException,
                         NotHostException)
-from conf import CORS_WHITELIST
+from conf import CORS_WHITELIST, fs
 
 app = Flask(__name__)
 CORS(app, origins=CORS_WHITELIST)
@@ -106,7 +107,14 @@ def done():
             = data.get('room_id'), data.get('urls'), data.get('uuid'), data.get('name'), data.get('is_done')
         change_player_progress(room_id, user_uuid, is_done)
         if is_done:
+            if not room_id or not urls or not user_uuid or not name:
+                raise
             record_player_progress(room_id, user_uuid, name, urls)
+            room_users = get_room_users(room_id)
+            if is_all_room_users_done(room_users):
+                record_game_result(room_id)
+                change_room_status(room_id, user_uuid, start=False, force_change=True)
+                delete_all_document_in_collection(fs.collection('progress').document(str(room_id)).collection('users'))
         else:
             cancel_player_progress(room_id, user_uuid)
         return jsonify({'message': 'urls is valid.'}), 200
