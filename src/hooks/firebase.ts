@@ -32,7 +32,10 @@ const useCreateRoom = (open: boolean): void => {
   }, [open]);
 };
 
-const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
+const useRoomData = (
+  isSubscribe: boolean,
+  roomId: number | undefined
+): RoomData => {
   const [users, setUsers] = useState<UserData[]>([]);
   const [host, setHost] = useState<string | undefined>(undefined);
   const [isReady, setIsReady] = useState<boolean>(false);
@@ -42,7 +45,7 @@ const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
   const userUuid = useRecoilValue(userUuidAtom);
 
   useEffect(() => {
-    if (!userUuid && (!open || !roomId)) return;
+    if (!userUuid && (!isSubscribe || !roomId)) return;
     const roomRef = ref(rtdb, `${roomId}/`);
     onValue(roomRef, (snapshot) => {
       const data = snapshot.val();
@@ -59,7 +62,7 @@ const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
 
     const userRef = ref(rtdb, `${roomId}/users/${userUuid}`);
     onDisconnect(userRef).remove();
-  }, [open, roomId]);
+  }, [isSubscribe, roomId]);
 
   return { users, host, isReady, status, start, goal };
 };

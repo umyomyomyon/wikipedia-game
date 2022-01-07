@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
+import React, { useState, useMemo, useEffect } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 // mui
 import { styled } from "@mui/system";
@@ -18,6 +18,7 @@ import { done } from "../../utils/room";
 
 //atoms
 import { roomId as roomIdAtom } from "../../recoil/atoms/room";
+import { mode as modeAtom } from "../../recoil/atoms/mode";
 import {
   userUuid as userUuidAtom,
   userName as userNameAtom,
@@ -32,14 +33,19 @@ const Wrapper = styled("div")({
 });
 
 export const GameContent: React.FC = (): JSX.Element => {
+  console.log("render");
   const roomId = useRecoilValue(roomIdAtom);
   const userUuid = useRecoilValue(userUuidAtom);
   const userName = useRecoilValue(userNameAtom);
-  const { users, host, start, goal } = useRoomData(true, roomId);
+  const setMode = useSetRecoilState(modeAtom);
+
   const [url, setUrl] = useState<string>("");
   const [urlError, setURLError] = useState<boolean>(false);
   const [urls, setUrls] = useState<string[]>([]);
   const [isDone, setIsDone] = useState<boolean>(false);
+  const [isSubscribeRoomData, setIsubscribeRoomData] = useState<boolean>(true);
+
+  const { users, host, start, goal } = useRoomData(isSubscribeRoomData, roomId);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(e.currentTarget.value);
