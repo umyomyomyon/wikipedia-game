@@ -5,7 +5,8 @@ from rooms import (create_room_id, init_room, _destroy_room, _join_room, setting
                    change_player_progress)
 from firestore import record_player_progress, cancel_player_progress, record_game_result
 from validation import validate_urls
-from exceptions import RoomNotExistException, RoomIdDuplicateException, URLValidationException, NotInRoomUserException
+from exceptions import (RoomNotExistException, RoomIdDuplicateException, URLValidationException, NotInRoomUserException,
+                        NotHostException)
 from conf import CORS_WHITELIST
 
 app = Flask(__name__)
@@ -48,12 +49,13 @@ def end_room():
         user_uuid, room_id = data['uuid'], data['room_id']
         change_room_status(room_id, user_uuid, start=False)
         record_game_result(room_id)
-    except RoomNotExistException as e:
+    except NotHostException as e:
         return jsonify({'message': e.message}), e.status_code
     except NotInRoomUserException as e:
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
         return jsonify({'message': 'end room failed.'}), 400
+
 
 #
 # @app.route('/room', methods=['DELETE'])

@@ -2,7 +2,7 @@ from random import randint
 
 from firebase_admin import db
 
-from exceptions import RoomIdDuplicateException, RoomNotExistException, NotInRoomUserException
+from exceptions import RoomIdDuplicateException, RoomNotExistException, NotInRoomUserException, NotHostException
 from conf import MIN_ROOM_ID, MAX_ROOM_ID, RoomStatuses
 
 # roomのデータ構造
@@ -77,9 +77,9 @@ def change_room_status(room_id: int, user_uuid: str, start=True):
         raise RoomNotExistException
 
     room_data = get_room_data(room_id)
-    is_in_room_user_uuid = user_uuid in room_data.get('users').keys()
-    if not is_in_room_user_uuid:
-        raise NotInRoomUserException
+    is_host = user_uuid == room_data.get('host')
+    if not is_host:
+        raise NotHostException
 
     next_status = RoomStatuses.ONGOING if start else RoomStatuses.ENDED
     room_ref.update({

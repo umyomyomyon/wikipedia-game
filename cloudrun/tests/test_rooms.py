@@ -3,7 +3,7 @@ from firebase_admin import db
 
 from rooms import (check_room_exists, init_room, _destroy_room, _join_room, setting_article, change_player_progress,
                    change_room_status)
-from exceptions import RoomNotExistException, NotInRoomUserException
+from exceptions import RoomNotExistException, NotInRoomUserException, NotHostException
 from conf import RoomStatuses
 
 
@@ -116,8 +116,8 @@ def test_end_room():
 
 
 @room_decorator(20004)
-def test_change_room_status_failed_not_in_room_user():
-    with pytest.raises(NotInRoomUserException):
+def test_change_room_status_failed_not_host_user_request():
+    with pytest.raises(NotHostException):
         room_id = 20004
         not_in_room_user_uuid = 'not'
         change_room_status(room_id, not_in_room_user_uuid, start=True)

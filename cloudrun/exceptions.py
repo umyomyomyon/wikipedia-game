@@ -19,3 +19,8 @@ class URLValidationException(Exception):
 class NotInRoomUserException(Exception):
     status_code = 403
     message = '参加中のユーザー以外にこの操作は許可されていません'
+
+
+class NotHostException(Exception):
+    status_code = 403
+    message = 'ルームホスト以外にこの操作は許可されていません'
