@@ -34,6 +34,7 @@ const useCreateRoom = (open: boolean): void => {
 
 const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
   const [users, setUsers] = useState<UserData[]>([]);
+  const [host, setHost] = useState<string | undefined>(undefined);
   const [isReady, setIsReady] = useState<boolean>(false);
   const [status, setStatus] = useState<RoomStatus | undefined>(undefined);
   const [start, setStart] = useState<string | undefined>(undefined);
@@ -48,6 +49,7 @@ const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
       if (data) {
         const arrangedUsers = arrangeUsers(data.users);
         setUsers(arrangedUsers);
+        setHost(data.host);
         setIsReady(data.isReady);
         setStatus(data.status);
         setStart(data.start);
@@ -59,7 +61,7 @@ const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
     onDisconnect(userRef).remove();
   }, [open, roomId]);
 
-  return { users, isReady, status, start, goal };
+  return { users, host, isReady, status, start, goal };
 };
 
 export { useCreateRoom, useRoomData };

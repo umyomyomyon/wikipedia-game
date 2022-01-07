@@ -33,13 +33,12 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
   open,
   handleClose,
 }): JSX.Element => {
-  const [isReady, setIsReady] = useState<boolean>(false);
   const roomId = useRecoilValue(roomIdAtom);
   const setMode = useSetRecoilState(modeAtom);
   const userUuid = useRecoilValue(userUuidAtom);
 
   useCreateRoom(open);
-  const { users } = useRoomData(open, roomId);
+  const { users, host } = useRoomData(open, roomId);
 
   const wrappedHandleClose = () => {
     handleClose();
@@ -73,7 +72,7 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
       }
     >
       <StartGoalSettings />
-      <UserList users={users} />
+      <UserList users={users} host={host} />
     </DialogBase>
   );
 };

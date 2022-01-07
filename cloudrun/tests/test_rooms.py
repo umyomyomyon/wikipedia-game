@@ -20,7 +20,8 @@ def test_init_room():
                 'name': user_name,
                 'isDone': False
             }
-        }
+        },
+        'host': user_uuid
     }
 
     init_room(room_id, user_uuid, user_name)
@@ -140,6 +141,7 @@ def test_setting_start_article():
                 'isDone': False
             }
         },
+        'host': 'test_user_uuid',
         'start': url
     }
 
@@ -162,6 +164,7 @@ def test_setting_goal_article():
                 'isDone': False
             }
         },
+        'host': 'test_user_uuid',
         'goal': url
     }
 

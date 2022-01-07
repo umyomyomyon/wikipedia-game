@@ -5,6 +5,16 @@ from firebase_admin import db
 from exceptions import RoomIdDuplicateException, RoomNotExistException, NotInRoomUserException
 from conf import MIN_ROOM_ID, MAX_ROOM_ID, RoomStatuses
 
+# roomのデータ構造
+# {
+#     'isReady': bool,
+#     'status': str,
+#     'start': str,
+#     'goal': str,
+#     'users': [],
+#     'host': str
+# }
+
 
 def check_room_exists(room_id: int, return_ref=False):
     ref = db.reference(f'{room_id}/')
@@ -47,7 +57,8 @@ def init_room(room_id: int, user_uuid: str, user_name: str):
                 'name': user_name,
                 'isDone': False
             }
-        }
+        },
+        'host': user_uuid
     })
 
 

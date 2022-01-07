@@ -35,7 +35,7 @@ export const GameContent: React.FC = (): JSX.Element => {
   const roomId = useRecoilValue(roomIdAtom);
   const userUuid = useRecoilValue(userUuidAtom);
   const userName = useRecoilValue(userNameAtom);
-  const { users, start, goal } = useRoomData(true, roomId);
+  const { users, host, start, goal } = useRoomData(true, roomId);
   const [url, setUrl] = useState<string>("");
   const [urlError, setURLError] = useState<boolean>(false);
   const [urls, setUrls] = useState<string[]>([]);
@@ -91,7 +91,7 @@ export const GameContent: React.FC = (): JSX.Element => {
 
   return (
     <React.Fragment>
-      <UserList users={users} />
+      <UserList users={users} host={host} />
       <Container maxWidth="sm" sx={{ height: "100vh", position: "relative" }}>
         <Wrapper>
           {start && <Target startOrGoal="start" url={start} />}
