@@ -1,12 +1,14 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from rooms import (create_room_id, init_room, destroy_room, _join_room, setting_article, _start_room,
-                   change_player_progress)
-from firestore import record_player_progress, cancel_player_progress
+from rooms import (create_room_id, init_room, _join_room, setting_article, change_room_status, change_player_progress,
+                   get_room_users, is_all_room_users_done)
+from firestore import (record_player_progress, cancel_player_progress, record_game_result,
+                       delete_all_document_in_collection)
 from validation import validate_urls
-from exceptions import RoomNotExistException, RoomIdDuplicateException, URLValidationException, NotInRoomUserException
-from conf import CORS_WHITELIST
+from exceptions import (RoomNotExistException, RoomIdDuplicateException, URLValidationException, NotInRoomUserException,
+                        NotHostException)
+from conf import CORS_WHITELIST, fs
 
 app = Flask(__name__)
 CORS(app, origins=CORS_WHITELIST)
@@ -31,7 +33,7 @@ def start_room():
     try:
         data = request.get_json()
         user_uuid, room_id = data['uuid'], data['room_id']
-        _start_room(room_id, user_uuid)
+        change_room_status(room_id, user_uuid, start=True)
         return jsonify({'message': 'game started.'}), 200
     except RoomNotExistException as e:
         return jsonify({'message': e.message}), e.status_code
@@ -41,16 +43,32 @@ def start_room():
         return jsonify({'message': 'game start failed.'}), 400
 
 
-@app.route('/room', methods=['DELETE'])
+@app.route('/room/end', methods=['POST'])
 def end_room():
     try:
-        room_id = 11111
-        destroy_room(room_id)
-        return jsonify({'message': 'room deleted.'}), 204
-    except RoomNotExistException as e:
+        data = request.get_json()
+        user_uuid, room_id = data['uuid'], data['room_id']
+        change_room_status(room_id, user_uuid, start=False)
+        record_game_result(room_id)
+    except NotHostException as e:
+        return jsonify({'message': e.message}), e.status_code
+    except NotInRoomUserException as e:
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
-        return jsonify({'message': 'error'}), 400
+        return jsonify({'message': 'end room failed.'}), 400
+
+
+#
+# @app.route('/room', methods=['DELETE'])
+# def destroy_room():
+#     try:
+#         room_id = 11111
+#         _destroy_room(room_id)
+#         return jsonify({'message': 'room deleted.'}), 204
+#     except RoomNotExistException as e:
+#         return jsonify({'message': e.message}), e.status_code
+#     except Exception as e:
+#         return jsonify({'message': 'error'}), 400
 
 
 @app.route('/room/join', methods=['POST'])
@@ -89,7 +107,14 @@ def done():
             = data.get('room_id'), data.get('urls'), data.get('uuid'), data.get('name'), data.get('is_done')
         change_player_progress(room_id, user_uuid, is_done)
         if is_done:
+            if not room_id or not urls or not user_uuid or not name:
+                raise
             record_player_progress(room_id, user_uuid, name, urls)
+            room_users = get_room_users(room_id)
+            if is_all_room_users_done(room_users):
+                record_game_result(room_id)
+                change_room_status(room_id, user_uuid, start=False, force_change=True)
+                delete_all_document_in_collection(fs.collection('progress').document(str(room_id)).collection('users'))
         else:
             cancel_player_progress(room_id, user_uuid)
         return jsonify({'message': 'urls is valid.'}), 200

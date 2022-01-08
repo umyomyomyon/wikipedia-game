@@ -32,8 +32,12 @@ const useCreateRoom = (open: boolean): void => {
   }, [open]);
 };
 
-const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
+const useRoomData = (
+  isSubscribe: boolean,
+  roomId: number | undefined
+): RoomData => {
   const [users, setUsers] = useState<UserData[]>([]);
+  const [host, setHost] = useState<string | undefined>(undefined);
   const [isReady, setIsReady] = useState<boolean>(false);
   const [status, setStatus] = useState<RoomStatus | undefined>(undefined);
   const [start, setStart] = useState<string | undefined>(undefined);
@@ -41,13 +45,14 @@ const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
   const userUuid = useRecoilValue(userUuidAtom);
 
   useEffect(() => {
-    if (!userUuid && (!open || !roomId)) return;
+    if (!userUuid && (!isSubscribe || !roomId)) return;
     const roomRef = ref(rtdb, `${roomId}/`);
     onValue(roomRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         const arrangedUsers = arrangeUsers(data.users);
         setUsers(arrangedUsers);
+        setHost(data.host);
         setIsReady(data.isReady);
         setStatus(data.status);
         setStart(data.start);
@@ -57,9 +62,9 @@ const useRoomData = (open: boolean, roomId: number | undefined): RoomData => {
 
     const userRef = ref(rtdb, `${roomId}/users/${userUuid}`);
     onDisconnect(userRef).remove();
-  }, [open, roomId]);
+  }, [isSubscribe, roomId]);
 
-  return { users, isReady, status, start, goal };
+  return { users, host, isReady, status, start, goal };
 };
 
 export { useCreateRoom, useRoomData };

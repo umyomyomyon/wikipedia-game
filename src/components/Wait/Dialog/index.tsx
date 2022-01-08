@@ -39,7 +39,7 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
 }): JSX.Element => {
   const roomId = useRecoilValue(roomIdAtom);
   const setMode = useSetRecoilState(modeAtom);
-  const { users, status, start, goal } = useRoomData(open, roomId);
+  const { users, host, status, start, goal } = useRoomData(open, roomId);
   const [startTarget, setStartTarget] = useState<string | undefined>(undefined);
   const [goalTarget, setGoalTarget] = useState<string | undefined>(undefined);
 
@@ -83,7 +83,7 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
           <TargetArticle target={goalTarget} startOrGoal="goal" />
         </Stack>
       </TargetContainer>
-      <UserList users={users} />
+      <UserList users={users} host={host} />
     </DialogBase>
   );
 };

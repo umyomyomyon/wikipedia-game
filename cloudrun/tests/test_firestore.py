@@ -2,7 +2,7 @@ import pytest
 
 from firebase_admin import db
 
-from rooms import setting_article, destroy_room
+from rooms import setting_article, _destroy_room
 from firestore import (delete_all_document_in_collection, record_player_progress, get_all_player_progresses,
                        record_game_result, cancel_player_progress)
 from conf import fs
@@ -123,4 +123,4 @@ def test_record_game_result():
 
     fs.collection('game-results').document(str(room_id)).delete()
     delete_all_document_in_collection(fs.collection('progress').document(str(room_id)).collection('users'))
-    destroy_room(room_id)
+    _destroy_room(room_id)

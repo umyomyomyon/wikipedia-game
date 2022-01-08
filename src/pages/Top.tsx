@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useRecoilValue } from "recoil";
 
 // components
 import { TopContent } from "../components/Top";
 import { GameContent } from "../components/Game";
+import { ResultContent } from "../components/Result";
 import { CreateRoomDialog } from "../components/CreateRoom/Dialog";
 import { JoinDialog } from "../components/Join/Dialog";
 import { WaitDialog } from "../components/Wait/Dialog";
@@ -31,11 +32,11 @@ export const Top: React.FC = (): JSX.Element => {
 
   return (
     <React.Fragment>
-      {mode === "top" ? (
+      {mode === "top" && (
         <TopContent enable={!!userNameConfirmed} {...topPageButtonHandlers} />
-      ) : (
-        <GameContent />
       )}
+      {mode === "game" && <GameContent />}
+      {mode === "result" && <ResultContent />}
       <RoomIdIndicator />
       <ModeChangeButton />
       <CreateRoomDialog
