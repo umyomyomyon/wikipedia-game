@@ -1,5 +1,5 @@
 export interface Result {
-  createdAt: any;
+  createdAt: Date;
   start: string;
   goal: string;
   results: UserResult[];
