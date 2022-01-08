@@ -33,7 +33,6 @@ const Wrapper = styled("div")({
 });
 
 export const GameContent: React.FC = (): JSX.Element => {
-  console.log("render");
   const roomId = useRecoilValue(roomIdAtom);
   const userUuid = useRecoilValue(userUuidAtom);
   const userName = useRecoilValue(userNameAtom);
