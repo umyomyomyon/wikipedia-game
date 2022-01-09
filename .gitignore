@@ -32,3 +32,6 @@ __pycache__/
 local_setup.sh
 
 .env
+
+_local_run.sh
+deploy.sh
