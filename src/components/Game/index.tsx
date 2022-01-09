@@ -44,7 +44,16 @@ export const GameContent: React.FC = (): JSX.Element => {
   const [isDone, setIsDone] = useState<boolean>(false);
   const [isSubscribeRoomData, setIsubscribeRoomData] = useState<boolean>(true);
 
-  const { users, host, start, goal } = useRoomData(isSubscribeRoomData, roomId);
+  const { users, host, status, start, goal } = useRoomData(
+    isSubscribeRoomData,
+    roomId
+  );
+
+  useEffect(() => {
+    if (status === "ENDED") {
+      setMode("result");
+    }
+  }, [status]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(e.currentTarget.value);
