@@ -5,4 +5,4 @@ export interface Result {
   results: UserResult[];
 }
 
-type UserResult = { uuid: string; name: string; urls: string[] };
+export type UserResult = { uuid: string; name: string; urls: string[] };

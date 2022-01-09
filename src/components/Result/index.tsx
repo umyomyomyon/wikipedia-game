@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import { styled } from "@mui/system";
 import Container from "@mui/material/Container";
 
+// componens
+import { UserPaths } from "./UserPaths";
+
 // types
 import { Result } from "../../types/result";
 
@@ -20,7 +23,6 @@ const Wrapper = styled("div")({
 export const ResultContent: React.FC = (): JSX.Element => {
   const roomId = 11119;
   const [result, setResult] = useState<Result | undefined>(undefined);
-  console.log(result);
 
   useEffect(() => {
     getResult(roomId).then((result) => {
@@ -30,9 +32,15 @@ export const ResultContent: React.FC = (): JSX.Element => {
 
   return (
     <React.Fragment>
-      <Container maxWidth="sm" sx={{ height: "100vh", position: "relative" }}>
+      <Container maxWidth="sm" sx={{ height: "100vh" }}>
         <Wrapper>
-          <p>This is result page.</p>
+          {result && (
+            <UserPaths
+              start={result.start}
+              goal={result.goal}
+              userResults={result.results}
+            />
+          )}
         </Wrapper>
       </Container>
     </React.Fragment>

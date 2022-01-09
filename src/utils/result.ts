@@ -3,7 +3,9 @@ import { doc, getDoc } from "firebase/firestore";
 import { fs } from "../firebaseConfig";
 
 // types
-import { Result } from "../types/result";
+import { Result, UserResult } from "../types/result";
+
+import { extractTitleFromURL } from "./validations";
 
 export const getResult = async (
   roomId: number
@@ -25,4 +27,24 @@ export const getResult = async (
     console.error("error occurred in getResult().");
     console.error(e);
   }
+};
+
+export const makeUrlAndTitlesFromUrls = (
+  start: string,
+  goal: string,
+  urls: string[]
+): { url: string; title: string; isLastItem: boolean }[] => {
+  const _urls = [start, ...urls, goal];
+  const urlAndTitles = _urls.map((url, index) => ({
+    url,
+    title: extractTitleFromURL(url),
+    isLastItem: index === _urls.length - 1,
+  }));
+  return urlAndTitles;
+};
+
+export const makeWinnerLength = (userResults: UserResult[]): number => {
+  const resultLengths = userResults.map((result) => result.urls.length);
+  const sorted = [...resultLengths.sort()];
+  return sorted[0];
 };
