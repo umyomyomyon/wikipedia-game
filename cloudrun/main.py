@@ -8,10 +8,11 @@ from firestore import (record_player_progress, cancel_player_progress, record_ga
 from validation import validate_urls
 from exceptions import (RoomNotExistException, RoomIdDuplicateException, URLValidationException, NotInRoomUserException,
                         NotHostException)
-from conf import CORS_WHITELIST, fs
+from conf import CORS_WHITELIST, fs, logging_client, resource
 
 app = Flask(__name__)
 CORS(app, origins=CORS_WHITELIST)
+logger = logging_client.logger(__name__)
 
 
 @app.route('/room', methods=['POST'])
@@ -25,6 +26,11 @@ def create_room():
     except RoomIdDuplicateException as e:
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
+        logger.log_struct(
+            {'error': str(e)},
+            resource=resource,
+            severity='ERROR'
+        )
         return jsonify({'message': 'create_room failed.'}), 400
 
 
@@ -40,6 +46,11 @@ def start_room():
     except NotInRoomUserException as e:
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
+        logger.log_struct(
+            {'error': str(e)},
+            resource=resource,
+            severity='ERROR'
+        )
         return jsonify({'message': 'game start failed.'}), 400
 
 
@@ -55,6 +66,11 @@ def end_room():
     except NotInRoomUserException as e:
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
+        logger.log_struct(
+            {'error': str(e)},
+            resource=resource,
+            severity='ERROR'
+        )
         return jsonify({'message': 'end room failed.'}), 400
 
 
@@ -81,6 +97,11 @@ def join_room():
     except RoomNotExistException as e:
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
+        logger.log_struct(
+            {'error': str(e)},
+            resource=resource,
+            severity='ERROR'
+        )
         return jsonify({'message': 'join room failed.'}), 400
 
 
@@ -95,6 +116,11 @@ def set_article():
     except RoomNotExistException as e:
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
+        logger.log_struct(
+            {'error': str(e)},
+            resource=resource,
+            severity='ERROR'
+        )
         return jsonify({'message': 'set_article failed.'}), 400
 
 
@@ -123,6 +149,11 @@ def done():
     except URLValidationException as e:
         return jsonify({'message': e.message}), e.status_code
     except Exception as e:
+        logger.log_struct(
+            {'error': str(e)},
+            resource=resource,
+            severity='ERROR'
+        )
         return jsonify({'message': 'validation error.'}), 400
 
 

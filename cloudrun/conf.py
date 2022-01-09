@@ -2,6 +2,16 @@ import os
 
 import firebase_admin
 from firebase_admin import credentials, firestore
+from google.cloud import logging_v2
+
+logging_client = logging_v2.Client()
+labels = {
+    "configuration_name": "wikipedia-game",
+    "service_name": "wikipedia-game"
+}
+resource = logging_v2.resource.Resource(type="cloud_run_revision", labels=labels)
+
+logger = logging_client.logger(__name__)
 
 MIN_ROOM_ID = 10000
 MAX_ROOM_ID = 99999
@@ -12,10 +22,14 @@ CORS_WHITELIST = [
     'http://localhost:3000'
 ]
 
-cred = credentials.Certificate(FIREBASE_CRED_PATH)
-firebase_admin.initialize_app(cred, {
-    'databaseURL': RTDB_URL
-})
+if FIREBASE_CRED_PATH:
+    cred = credentials.Certificate(FIREBASE_CRED_PATH)
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': RTDB_URL
+    })
+else:
+    firebase_admin.initialize_app(options={'databaseURL': RTDB_URL})
+
 fs = firestore.client()
 
 
