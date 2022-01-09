@@ -59,7 +59,7 @@ export const UserPaths: React.FC<UserPathsProps> = ({
           <Typography
             color="primary"
             fontSize={18}
-            width={100}
+            minWidth={100}
             sx={{ fontWeight: "bold" }}
           >
             {userResult.name}

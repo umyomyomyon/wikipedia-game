@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
 
 // mui
 import { styled } from "@mui/system";
@@ -6,6 +7,9 @@ import Container from "@mui/material/Container";
 
 // componens
 import { UserPaths } from "./UserPaths";
+
+// atoms
+import { roomId as roomIdAtom } from "../../recoil/atoms/room";
 
 // types
 import { Result } from "../../types/result";
@@ -21,14 +25,15 @@ const Wrapper = styled("div")({
 });
 
 export const ResultContent: React.FC = (): JSX.Element => {
-  const roomId = 11119;
+  const roomId = useRecoilValue(roomIdAtom);
   const [result, setResult] = useState<Result | undefined>(undefined);
 
   useEffect(() => {
+    if (!roomId) return;
     getResult(roomId).then((result) => {
       setResult(result);
     });
-  }, []);
+  }, [roomId]);
 
   return (
     <React.Fragment>

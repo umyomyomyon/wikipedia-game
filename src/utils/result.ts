@@ -16,7 +16,7 @@ export const getResult = async (
     if (docSnap.exists()) {
       const docData = docSnap.data();
       const result: Result = {
-        createdAt: docData["createdAt"].toDate(),
+        createdAt: docData["createdAt"],
         start: docData["start"],
         goal: docData["goal"],
         results: docData["results"],
