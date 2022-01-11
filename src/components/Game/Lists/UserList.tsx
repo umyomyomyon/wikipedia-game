@@ -5,7 +5,6 @@ import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 
 // icons
-import PersonIcon from "@mui/icons-material/Person";
 import DoneIcon from "@mui/icons-material/Done";
 
 // components
