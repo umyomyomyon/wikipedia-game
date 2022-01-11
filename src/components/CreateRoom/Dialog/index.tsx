@@ -6,6 +6,7 @@ import { styled } from "@mui/system";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
+import Stack from "@mui/material/Stack";
 
 // components
 import { DialogBase } from "../../general/DialogBase";
@@ -33,6 +34,7 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
   open,
   handleClose,
 }): JSX.Element => {
+  const [isReady, setIsReady] = useState<boolean>(false);
   const roomId = useRecoilValue(roomIdAtom);
   const setMode = useSetRecoilState(modeAtom);
   const userUuid = useRecoilValue(userUuidAtom);
@@ -51,9 +53,14 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
     handleClose();
   };
 
+  const handleChangeReadyState = (_isReady: boolean) => {
+    setIsReady(_isReady);
+  };
+
   return (
     <DialogBase
       open={open}
+      disableEscapeKeyDown={true}
       onClose={wrappedHandleClose}
       title="みんなで"
       dialogActions={
@@ -65,13 +72,22 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
           }}
         >
           <StyledTypography color="primary">ROOM ID: {roomId}</StyledTypography>
-          <Button variant="contained" onClick={handleClickStart}>
-            <StyledTypography>START</StyledTypography>
-          </Button>
+          <Stack direction="row" spacing={1}>
+            <Button color="secondary" variant="contained" onClick={handleClose}>
+              <StyledTypography>CANCEL</StyledTypography>
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleClickStart}
+              disabled={!isReady}
+            >
+              <StyledTypography>START</StyledTypography>
+            </Button>
+          </Stack>
         </DialogActions>
       }
     >
-      <StartGoalSettings />
+      <StartGoalSettings readyStateHandler={handleChangeReadyState} />
       <UserList users={users} host={host} />
     </DialogBase>
   );

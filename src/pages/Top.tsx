@@ -14,6 +14,7 @@ import { mode as modeAtom } from "../recoil/atoms/mode";
 import { userNameConfirmed as userNameConfirmedAtom } from "../recoil/atoms/user";
 
 // dev
+import { isDev } from "../conf";
 import { ModeChangeButton, RoomIdIndicator } from "../components/dev";
 
 export const Top: React.FC = (): JSX.Element => {
@@ -37,8 +38,12 @@ export const Top: React.FC = (): JSX.Element => {
       )}
       {mode === "game" && <GameContent />}
       {mode === "result" && <ResultContent />}
-      <RoomIdIndicator />
-      <ModeChangeButton />
+      {isDev && (
+        <React.Fragment>
+          <RoomIdIndicator />
+          <ModeChangeButton />
+        </React.Fragment>
+      )}
       <CreateRoomDialog
         open={isCreateDialogOpen}
         handleClose={() => setIsCreateDialogOpen(false)}

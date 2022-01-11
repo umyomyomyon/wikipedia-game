@@ -1,6 +1,8 @@
 import { atom } from "recoil";
 
-export const mode = atom<"top" | "game" | "result">({
+type SceneMode = "top" | "game" | "result";
+
+export const mode = atom<SceneMode>({
   key: "mode",
   default: "top",
 });
