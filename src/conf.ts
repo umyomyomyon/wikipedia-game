@@ -7,3 +7,5 @@ export const COLORS = {
   primary: "#6558F5",
   secondary: "#D3455B",
 };
+
+export const isDev = process.env.REACT_APP_ENV !== "production";

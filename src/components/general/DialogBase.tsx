@@ -13,6 +13,7 @@ interface DialogBaseProps {
   title: string;
   dialogActions?: JSX.Element;
   contentSx?: SxProps;
+  disableEscapeKeyDown?: boolean;
 }
 
 export const DialogBase: React.FC<DialogBaseProps> = ({
@@ -22,12 +23,14 @@ export const DialogBase: React.FC<DialogBaseProps> = ({
   title,
   dialogActions,
   contentSx,
+  disableEscapeKeyDown,
 }): JSX.Element => {
   return (
     <Dialog
       open={open}
       onClose={onClose}
       PaperProps={{ sx: { backgroundColor: "#e0e9f0", width: "80%" } }}
+      disableEscapeKeyDown={disableEscapeKeyDown}
     >
       <DialogTitle color="primary" sx={{ fontWeight: "bold" }}>
         {title}

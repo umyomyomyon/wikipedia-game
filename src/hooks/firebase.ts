@@ -17,19 +17,19 @@ import { createRoom, arrangeUsers } from "../utils/room";
 import { UserData } from "../types/user";
 import { RoomData, RoomStatus } from "../types/room";
 
-const useCreateRoom = (open: boolean): void => {
+const useCreateRoom = (enable: boolean): void => {
   const setRoomId = useSetRecoilState(roomIdAtom);
   const userUuid = useRecoilValue(userUuidAtom);
   const userName = useRecoilValue(userNameAtom);
 
   useEffect(() => {
-    if (!open) return;
+    if (!enable) return;
     if (!userUuid) return;
 
     createRoom(userUuid, userName).then((result) => {
       setRoomId(result);
     });
-  }, [open]);
+  }, [enable]);
 };
 
 const useRoomData = (

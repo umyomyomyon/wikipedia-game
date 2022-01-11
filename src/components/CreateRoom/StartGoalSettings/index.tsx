@@ -28,7 +28,13 @@ const SettingsContainer = styled(Stack)({
 const TextContainer = makeContainer(53);
 const TextFieldContainer = makeContainer(235);
 
-export const StartGoalSettings: React.FC = (): JSX.Element => {
+interface StartGoalSettingsProps {
+  readyStateHandler: (readyState: boolean) => void;
+}
+
+export const StartGoalSettings: React.FC<StartGoalSettingsProps> = ({
+  readyStateHandler,
+}): JSX.Element => {
   const [startURL, setStartURL] = useState<string | undefined>(undefined);
   const [goalURL, setGoalURL] = useState<string | undefined>(undefined);
   const [startURLError, setStartURLError] = useState<boolean>(false);
@@ -55,6 +61,7 @@ export const StartGoalSettings: React.FC = (): JSX.Element => {
       const errorStateHandler =
         startOrGoal === "start" ? setStartURLError : setGoalURLError;
       errorStateHandler(true);
+      return;
     }
     const title = extractTitleFromURL(targetURL);
     const titleStateHandler =
@@ -73,6 +80,10 @@ export const StartGoalSettings: React.FC = (): JSX.Element => {
     if (!goalURL) return;
     setStartOrGoalArticle(roomId, goalURL, "goal");
   }, [goalURLTitle]);
+
+  useEffect(() => {
+    readyStateHandler(!!startURLTitle && !!goalURLTitle);
+  }, [startURLTitle, goalURLTitle]);
 
   const handleCancelClick = (startOrGoal: "start" | "goal") => () => {
     const titleStateHandler =

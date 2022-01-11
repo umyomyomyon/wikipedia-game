@@ -121,7 +121,7 @@ export const GameContent: React.FC = (): JSX.Element => {
           {goal && <Target startOrGoal="goal" url={goal} />}
         </Wrapper>
         <DoneButton
-          disabled={false}
+          disabled={urls.length === 0}
           isDone={isDone}
           handleDone={handleDone}
           handleCancel={handleCancel}

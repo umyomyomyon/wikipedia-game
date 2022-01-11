@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
 
 // mui
 import { styled } from "@mui/system";
 import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 // componens
 import { UserPaths } from "./UserPaths";
 
 // atoms
 import { roomId as roomIdAtom } from "../../recoil/atoms/room";
+import { mode as modeAtom } from "../../recoil/atoms/mode";
 
 // types
 import { Result } from "../../types/result";
@@ -25,7 +28,8 @@ const Wrapper = styled("div")({
 });
 
 export const ResultContent: React.FC = (): JSX.Element => {
-  const roomId = useRecoilValue(roomIdAtom);
+  const [roomId, setRoomId] = useRecoilState(roomIdAtom);
+  const setMode = useSetRecoilState(modeAtom);
   const [result, setResult] = useState<Result | undefined>(undefined);
 
   useEffect(() => {
@@ -34,6 +38,11 @@ export const ResultContent: React.FC = (): JSX.Element => {
       setResult(result);
     });
   }, [roomId]);
+
+  const handleClick = () => {
+    setRoomId(undefined);
+    setMode("top");
+  };
 
   return (
     <React.Fragment>
@@ -46,6 +55,9 @@ export const ResultContent: React.FC = (): JSX.Element => {
               userResults={result.results}
             />
           )}
+          <Button variant="contained" onClick={handleClick}>
+            <Typography fontWeight="bold">TOPに戻る</Typography>
+          </Button>
         </Wrapper>
       </Container>
     </React.Fragment>
