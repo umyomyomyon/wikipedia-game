@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 // mui
@@ -42,7 +42,7 @@ export const GameContent: React.FC = (): JSX.Element => {
   const [urlError, setURLError] = useState<boolean>(false);
   const [urls, setUrls] = useState<string[]>([]);
   const [isDone, setIsDone] = useState<boolean>(false);
-  const [isSubscribeRoomData, setIsubscribeRoomData] = useState<boolean>(true);
+  const [isSubscribeRoomData, setIsSubscribeRoomData] = useState<boolean>(true);
 
   const { users, host, status, start, goal } = useRoomData(
     isSubscribeRoomData,
@@ -52,6 +52,7 @@ export const GameContent: React.FC = (): JSX.Element => {
   useEffect(() => {
     if (status === "ENDED") {
       setMode("result");
+      return () => setIsSubscribeRoomData(false);
     }
   }, [status]);
 

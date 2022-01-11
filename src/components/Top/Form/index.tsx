@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 import { getAuth, signInAnonymously } from "firebase/auth";
 
@@ -27,7 +27,7 @@ export const PlayerNameForm: React.FC = (): JSX.Element => {
   const [userNameConfirmed, setUserNameConfirmed] = useRecoilState(
     userNameConfirmedAtom
   );
-  const [userUuid, setUserUuid] = useRecoilState(userUuidAtom);
+  const setUserUuid = useSetRecoilState(userUuidAtom);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(e.currentTarget.value);

@@ -36,7 +36,10 @@
       "react-app",
       "react-app/jest",
       "plugin:@typescript-eslint/recommended"
-    ]
+    ],
+    "rules": {
+      "react-hooks/exhaustive-deps": "off"
+    }
   },
   "browserslist": {
     "production": [
