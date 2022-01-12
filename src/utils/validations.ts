@@ -21,4 +21,13 @@ const validateRoomId = (roomId: number): boolean => {
   return roomId >= 10000 && roomId <= 99999;
 };
 
-export { extractTitleFromURL, validateWikipediaUrl, validateRoomId };
+const validateUserName = (userName: string): boolean => {
+  return userName.length <= 15;
+};
+
+export {
+  extractTitleFromURL,
+  validateWikipediaUrl,
+  validateRoomId,
+  validateUserName,
+};
