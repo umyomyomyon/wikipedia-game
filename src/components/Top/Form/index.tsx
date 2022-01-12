@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
 import { getAuth, signInAnonymously } from "firebase/auth";
@@ -22,7 +22,10 @@ import {
   userUuid as userUuidAtom,
 } from "../../../recoil/atoms/user";
 
+import { validateUserName } from "../../../utils/validations";
+
 export const PlayerNameForm: React.FC = (): JSX.Element => {
+  const [formError, setFormError] = useState<boolean>(false);
   const [userName, setUserName] = useRecoilState(userNameAtom);
   const [userNameConfirmed, setUserNameConfirmed] = useRecoilState(
     userNameConfirmedAtom
@@ -35,7 +38,14 @@ export const PlayerNameForm: React.FC = (): JSX.Element => {
 
   const handleClick = () => {
     if (!userName) return;
+
+    if (!validateUserName(userName)) {
+      setFormError(true);
+      return;
+    }
+
     setUserNameConfirmed(true);
+
     const auth = getAuth();
     signInAnonymously(auth)
       .then(() => {
@@ -52,6 +62,7 @@ export const PlayerNameForm: React.FC = (): JSX.Element => {
     setUserName("");
     setUserUuid(undefined);
     setUserNameConfirmed(false);
+    setFormError(false);
   };
 
   return (
@@ -66,7 +77,15 @@ export const PlayerNameForm: React.FC = (): JSX.Element => {
           {userName}
         </Typography>
       ) : (
-        <TextField onChange={handleChange} placeholder="プレイヤー名を入力" />
+        <TextField
+          onChange={handleChange}
+          placeholder="プレイヤー名を入力"
+          error={formError}
+          helperText={
+            formError ? "15文字以内でプレイヤー名を入力してください" : undefined
+          }
+          onFocus={() => setFormError(false)}
+        />
       )}
       {userNameConfirmed ? (
         <SquareButton
