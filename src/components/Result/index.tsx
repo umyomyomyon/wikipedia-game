@@ -46,7 +46,7 @@ export const ResultContent: React.FC = (): JSX.Element => {
 
   return (
     <React.Fragment>
-      <Container maxWidth="sm" sx={{ height: "100vh" }}>
+      <Container maxWidth="sm" sx={{ minHeight: "100vh" }}>
         <Wrapper>
           {result && (
             <UserPaths
