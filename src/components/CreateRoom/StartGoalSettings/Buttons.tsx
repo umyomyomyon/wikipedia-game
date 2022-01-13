@@ -5,7 +5,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 //icons
 import CheckIcon from "@mui/icons-material/Check";
-import ShuffleIcon from "@mui/icons-material/Shuffle";
+// import ShuffleIcon from "@mui/icons-material/Shuffle";
 import CancelIcon from "@mui/icons-material/Close";
 
 import { SquareButton } from "../../general/SquareButton";
@@ -44,11 +44,11 @@ export const StartGoalSettingButtons: React.FC<Props> = ({
           </SquareButton>
         </Tooltip>
       )}
-      <Tooltip title="ランダム" placement="top">
+      {/* <Tooltip title="ランダム" placement="top">
         <SquareButton color="primary" variant="contained">
           <ShuffleIcon />
         </SquareButton>
-      </Tooltip>
+      </Tooltip> */}
     </React.Fragment>
   );
 };
