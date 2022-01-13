@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import { rtdb } from "../firebaseConfig";
-import { onDisconnect, onValue, ref } from "@firebase/database";
+import { onDisconnect, onValue, ref, remove } from "@firebase/database";
 
 // atoms
 import {
@@ -67,4 +67,9 @@ const useRoomData = (
   return { users, host, isReady, status, start, goal };
 };
 
-export { useCreateRoom, useRoomData };
+const disconnectRoom = (roomId: number, userUuid: string): void => {
+  const _ref = ref(rtdb, `${roomId}/users/${userUuid}`);
+  remove(_ref);
+};
+
+export { useCreateRoom, useRoomData, disconnectRoom };

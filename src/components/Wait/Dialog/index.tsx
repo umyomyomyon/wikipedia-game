@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
 
 // mui
 import { styled } from "@mui/system";
@@ -13,10 +13,11 @@ import { UserList } from "../../general/UserList";
 import { TargetArticle } from "./TargetArticle";
 
 // atoms
+import { userUuid as userUuidAtom } from "../../../recoil/atoms/user";
 import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
 import { mode as modeAtom } from "../../../recoil/atoms/mode";
 
-import { useRoomData } from "../../../hooks/firebase";
+import { useRoomData, disconnectRoom } from "../../../hooks/firebase";
 import { extractTitleFromURL } from "../../../utils/validations";
 
 const TargetContainer = styled(Stack)({
@@ -37,21 +38,22 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
   open,
   handleClose,
 }): JSX.Element => {
-  const roomId = useRecoilValue(roomIdAtom);
+  const userUuid = useRecoilValue(userUuidAtom);
+  const [roomId, setRoomId] = useRecoilState(roomIdAtom);
   const setMode = useSetRecoilState(modeAtom);
   const { users, host, status, start, goal } = useRoomData(open, roomId);
   const [startTarget, setStartTarget] = useState<string | undefined>(undefined);
   const [goalTarget, setGoalTarget] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (!start) return;
+    if (!start || !open) return;
     setStartTarget(extractTitleFromURL(start));
-  }, [start]);
+  }, [start, open]);
 
   useEffect(() => {
-    if (!goal) return;
+    if (!goal || !open) return;
     setGoalTarget(extractTitleFromURL(goal));
-  }, [goal]);
+  }, [goal, open]);
 
   useEffect(() => {
     if (status === "ONGOING") {
@@ -59,6 +61,17 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
       handleClose();
     }
   }, [status]);
+
+  // ダイアログが閉じられたときの処理
+  useEffect(() => {
+    if (!open && !!status && status === "PREPARATION") {
+      setStartTarget(undefined);
+      setGoalTarget(undefined);
+      if (!roomId || !userUuid) return;
+      disconnectRoom(roomId, userUuid);
+      setRoomId(undefined);
+    }
+  }, [open]);
 
   return (
     <DialogBase
