@@ -15,6 +15,7 @@ import { Path } from "./Path";
 import { UserResult } from "../../types/result";
 
 import { makeWinnerLength } from "../../utils/result";
+import { COLORS } from "../../conf";
 
 const IconContainer = styled("div")({
   width: 30,
@@ -44,12 +45,13 @@ export const UserPaths: React.FC<UserPathsProps> = ({
           alignItems="center"
           spacing={2}
           marginBottom={2}
+          marginTop={2}
           key={userResult.uuid}
-          // sx={{
-          //   borderRadius: 1,
-          //   border: `1px solid ${COLORS.primary}`,
-          //   padding: 2,
-          // }}
+          sx={{
+            borderRadius: 1,
+            border: `1px solid ${COLORS.primary}`,
+            padding: 2,
+          }}
         >
           <IconContainer>
             {userResult.urls.length === winnerLength && (
