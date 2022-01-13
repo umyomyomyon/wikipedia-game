@@ -107,18 +107,23 @@ export const GameContent: React.FC = (): JSX.Element => {
   return (
     <React.Fragment>
       <UserList users={users} host={host} />
-      <Container maxWidth="sm" sx={{ height: "100vh", position: "relative" }}>
+      <Container
+        maxWidth="sm"
+        sx={{ minHeight: "100vh", position: "relative" }}
+      >
         <Wrapper>
           {start && <Target startOrGoal="start" url={start} />}
           <UrlList urls={urls} />
-          <URLField
-            url={url}
-            error={urlError}
-            handleChange={handleChange}
-            handleClick={handleDoneClick}
-            handleReturnClick={handleReturnClick}
-            handleFocus={handleFocus}
-          />
+          {!isDone && (
+            <URLField
+              url={url}
+              error={urlError}
+              handleChange={handleChange}
+              handleClick={handleDoneClick}
+              handleReturnClick={handleReturnClick}
+              handleFocus={handleFocus}
+            />
+          )}
           {goal && <Target startOrGoal="goal" url={goal} />}
         </Wrapper>
         <DoneButton
