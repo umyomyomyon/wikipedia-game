@@ -27,13 +27,13 @@ export const TopPageButtons: React.FC<TopPageButtonProps> = ({
   return (
     <Collapse in={enable}>
       <Stack direction="column" spacing={2}>
-        <StyledButton
+        {/* <StyledButton
           variant="contained"
           onClick={handleClickCreateRoomDialogOpen}
           disabled={!enable}
         >
           １人で始める
-        </StyledButton>
+        </StyledButton> */}
         <StyledButton
           variant="contained"
           onClick={handleClickCreateRoomDialogOpen}
