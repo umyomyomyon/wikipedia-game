@@ -25,7 +25,6 @@ import {
 } from "../../recoil/atoms/user";
 
 const Wrapper = styled("div")({
-  height: "100%",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -109,7 +108,13 @@ export const GameContent: React.FC = (): JSX.Element => {
       <UserList users={users} host={host} />
       <Container
         maxWidth="sm"
-        sx={{ minHeight: "100vh", position: "relative" }}
+        sx={{
+          minHeight: "100vh",
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
       >
         <Wrapper>
           {start && <Target startOrGoal="start" url={start} />}
