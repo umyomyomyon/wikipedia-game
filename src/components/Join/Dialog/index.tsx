@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useRecoilValue, useRecoilState } from "recoil";
+import React, { useState, useEffect } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 // mui
 import Typography from "@mui/material/Typography";
@@ -20,6 +20,7 @@ import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
 
 import { joinRoom } from "../../../utils/room";
 import { validateRoomId } from "../../../utils/validations";
+import { usePrevious } from "../../../hooks/common";
 
 interface JoinDialogProps {
   open: boolean;
@@ -32,20 +33,31 @@ export const JoinDialog: React.FC<JoinDialogProps> = ({
   handleClose,
   handleOpenWaitDialog,
 }): JSX.Element => {
-  const [roomId, setRoomId] = useRecoilState(roomIdAtom);
+  const setRoomId = useSetRecoilState(roomIdAtom);
+  const [roomIdBuffer, setRoomIdBuffer] = useState<number | undefined>(
+    undefined
+  );
   const [roomIdError, setRoomIdError] = useState<boolean>(false);
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const userName = useRecoilValue(userNameAtom);
   const userUuid = useRecoilValue(userUuidAtom);
+  const prevOpen = usePrevious<boolean>(open);
+
+  // ダイアログが閉じたときの処理
+  useEffect(() => {
+    if (prevOpen === true && open === false) {
+      setRoomIdBuffer(undefined);
+    }
+  }, [open]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoomId(Number(e.currentTarget.value));
+    setRoomIdBuffer(Number(e.currentTarget.value));
   };
 
   const handleClick = () => {
-    if (!roomId) return;
+    if (!roomIdBuffer) return;
     if (!userUuid) return;
-    const isValidRoomId = validateRoomId(roomId);
+    const isValidRoomId = validateRoomId(roomIdBuffer);
     if (!isValidRoomId) {
       setRoomIdError(true);
       return;
@@ -53,7 +65,7 @@ export const JoinDialog: React.FC<JoinDialogProps> = ({
 
     try {
       setIsFetching(true);
-      joinRoom(roomId, userUuid, userName).then((result) => {
+      joinRoom(roomIdBuffer, userUuid, userName).then((result) => {
         if (result) {
           setRoomId(result);
           handleOpenWaitDialog();
@@ -89,7 +101,11 @@ export const JoinDialog: React.FC<JoinDialogProps> = ({
               error={roomIdError}
               onFocus={() => setRoomIdError(false)}
             />
-            <Button variant="contained" onClick={handleClick}>
+            <Button
+              variant="contained"
+              onClick={handleClick}
+              disabled={!roomIdBuffer}
+            >
               JOIN
             </Button>
           </React.Fragment>
