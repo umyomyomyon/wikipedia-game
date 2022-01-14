@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 // mui
@@ -20,6 +20,7 @@ import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
 
 import { joinRoom } from "../../../utils/room";
 import { validateRoomId } from "../../../utils/validations";
+import { usePrevious } from "../../../hooks/common";
 
 interface JoinDialogProps {
   open: boolean;
@@ -40,6 +41,14 @@ export const JoinDialog: React.FC<JoinDialogProps> = ({
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const userName = useRecoilValue(userNameAtom);
   const userUuid = useRecoilValue(userUuidAtom);
+  const prevOpen = usePrevious<boolean>(open);
+
+  // ダイアログが閉じたときの処理
+  useEffect(() => {
+    if (prevOpen === true && open === false) {
+      setRoomIdBuffer(undefined);
+    }
+  }, [open]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomIdBuffer(Number(e.currentTarget.value));
