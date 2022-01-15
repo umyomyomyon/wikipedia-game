@@ -1,6 +1,6 @@
 import { UserData } from "./user";
 
-export interface RoomData {
+interface RoomData {
   users: UserData[];
   host: string | undefined;
   isReady: boolean;
@@ -8,5 +8,7 @@ export interface RoomData {
   start: string | undefined;
   goal: string | undefined;
 }
+
+export type ImmutableRoomData = Readonly<RoomData>;
 
 export type RoomStatus = "PREPARATION" | "ONGOING" | "ENDED";
