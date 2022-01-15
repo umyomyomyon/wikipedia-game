@@ -15,7 +15,7 @@ import { createRoom, arrangeUsers } from "../utils/room";
 
 // types
 import { UserData } from "../types/user";
-import { RoomData, RoomStatus } from "../types/room";
+import { ImmutableRoomData as RoomData, RoomStatus } from "../types/room";
 
 const useCreateRoom = (enable: boolean): void => {
   const setRoomId = useSetRecoilState(roomIdAtom);
