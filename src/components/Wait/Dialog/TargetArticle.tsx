@@ -33,7 +33,12 @@ export const TargetArticle: React.FC<TargetArticleProps> = ({
             {target}
           </Typography>
         ) : (
-          <CircularProgress />
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Typography color="primary" fontWeight="bold">
+              ホストが設定中
+            </Typography>
+            <CircularProgress />
+          </Stack>
         )}
       </TargetTextContainer>
     </Stack>
