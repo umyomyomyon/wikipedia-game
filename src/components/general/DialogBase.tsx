@@ -9,8 +9,8 @@ import Divider from "@mui/material/Divider";
 
 interface DialogBaseProps {
   open: boolean;
-  onClose: () => void;
   title: string;
+  onClose?: () => void;
   dialogActions?: JSX.Element;
   contentSx?: SxProps;
   disableEscapeKeyDown?: boolean;
@@ -19,8 +19,8 @@ interface DialogBaseProps {
 export const DialogBase: React.FC<DialogBaseProps> = ({
   children,
   open,
-  onClose,
   title,
+  onClose,
   dialogActions,
   contentSx,
   disableEscapeKeyDown,
