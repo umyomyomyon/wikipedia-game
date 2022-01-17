@@ -33,7 +33,13 @@ interface UserListItemProps {
   host: string | undefined;
 }
 
+const pickColor = (isDone: boolean, isSurrendered: boolean) => {
+  if (isDone) return "primary";
+  if (isSurrendered) return "secondary";
+};
+
 const UserListItem: React.FC<UserListItemProps> = ({ user, host }) => {
+  const color = pickColor(user.isDone, user.isSurrendered);
   return (
     <Stack direction="row">
       <Chip
@@ -45,7 +51,7 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, host }) => {
           )
         }
         label={user.name}
-        color={user.isDone ? "primary" : undefined}
+        color={color}
       />
     </Stack>
   );

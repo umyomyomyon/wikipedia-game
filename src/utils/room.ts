@@ -24,10 +24,11 @@ export const createRoom = async (
 export const arrangeUsers = (usersObj: UserObj | null): UserData[] => {
   if (!usersObj) return [];
   const arrangedUsers: UserData[] = Object.entries(usersObj).map(
-    ([uuid, { name, isDone }]) => ({
+    ([uuid, { name, isDone, isSurrendered }]) => ({
       uuid,
       name,
       isDone,
+      isSurrendered,
     })
   );
   return arrangedUsers;
