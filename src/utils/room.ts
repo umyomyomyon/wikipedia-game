@@ -110,3 +110,17 @@ export const done = async (
     console.error("error in done.");
   }
 };
+
+export const destroy = async (roomId: number, uuid: string): Promise<void> => {
+  const url = `${cloudrunUrl}/room`;
+  try {
+    await axios.delete<void>(url, {
+      data: {
+        room_id: roomId,
+        uuid,
+      },
+    });
+  } catch {
+    console.error("error in destroy.");
+  }
+};

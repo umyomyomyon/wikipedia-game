@@ -19,7 +19,7 @@ import { mode as modeAtom } from "../../../recoil/atoms/mode";
 import { userUuid as userUuidAtom } from "../../../recoil/atoms/user";
 
 import { useCreateRoom, useRoomData } from "../../../hooks/firebase";
-import { startRoom } from "../../../utils/room";
+import { startRoom, destroy } from "../../../utils/room";
 
 const StyledTypography = styled(Typography)({
   fontWeight: "bold",
@@ -43,6 +43,7 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
   const { users, host } = useRoomData(open, roomId);
 
   const wrappedHandleClose = () => {
+    if (roomId && userUuid) destroy(roomId, userUuid);
     handleClose();
   };
 
@@ -61,7 +62,6 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
     <DialogBase
       open={open}
       disableEscapeKeyDown={true}
-      onClose={wrappedHandleClose}
       title="みんなで"
       dialogActions={
         <DialogActions
@@ -73,7 +73,11 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
         >
           <StyledTypography color="primary">ROOM ID: {roomId}</StyledTypography>
           <Stack direction="row" spacing={1}>
-            <Button color="secondary" variant="contained" onClick={handleClose}>
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={wrappedHandleClose}
+            >
               <StyledTypography>CANCEL</StyledTypography>
             </Button>
             <Button
