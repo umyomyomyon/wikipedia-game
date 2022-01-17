@@ -114,7 +114,9 @@ export const GameContent: React.FC = (): JSX.Element => {
 
   const handleSurrender = () => {
     if (!roomId || !userUuid) return;
-    done(roomId, userUuid, true, true, []).then(() => setIsSurrendered(true));
+    done(roomId, userUuid, true, true, [], userName).then(() =>
+      setIsSurrendered(true)
+    );
   };
 
   return (

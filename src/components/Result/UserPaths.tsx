@@ -5,11 +5,9 @@ import { styled } from "@mui/system";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-// icons
-import WinnerIcon from "@mui/icons-material/EmojiEvents";
-
 // components
 import { Path } from "./Path";
+import { ResultIcon } from "./ResultIcon";
 
 // types
 import { UserResult } from "../../types/result";
@@ -54,9 +52,10 @@ export const UserPaths: React.FC<UserPathsProps> = ({
           }}
         >
           <IconContainer>
-            {userResult.urls.length === winnerLength && (
-              <WinnerIcon color="primary" sx={{ width: 30, height: 30 }} />
-            )}
+            <ResultIcon
+              isWinner={userResult.urls.length === winnerLength}
+              isSurrendered={userResult.isSurrendered}
+            />
           </IconContainer>
           <Typography
             color="primary"
@@ -66,7 +65,9 @@ export const UserPaths: React.FC<UserPathsProps> = ({
           >
             {userResult.name}
           </Typography>
-          <Path start={start} goal={goal} urls={userResult.urls} />
+          {!userResult.isSurrendered && (
+            <Path start={start} goal={goal} urls={userResult.urls} />
+          )}
         </Stack>
       ))}
     </React.Fragment>

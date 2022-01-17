@@ -44,7 +44,9 @@ export const makeUrlAndTitlesFromUrls = (
 };
 
 export const makeWinnerLength = (userResults: UserResult[]): number => {
-  const resultLengths = userResults.map((result) => result.urls.length);
+  const resultLengths = userResults
+    .map((result) => result.urls.length)
+    .filter((l) => !!l);
   const sorted = [...resultLengths.sort()];
   return sorted[0];
 };
