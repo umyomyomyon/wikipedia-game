@@ -92,6 +92,7 @@ export const done = async (
   roomId: number,
   uuid: string,
   isDone: boolean,
+  isSurrendered: boolean,
   urls?: string[],
   name?: string
 ): Promise<void> => {
@@ -103,6 +104,7 @@ export const done = async (
       uuid,
       name,
       is_done: isDone,
+      is_surrendered: isSurrendered,
     });
   } catch {
     console.error("error in done.");
