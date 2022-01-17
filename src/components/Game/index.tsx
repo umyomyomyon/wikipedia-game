@@ -11,6 +11,7 @@ import { UrlList } from "./Lists/URLList";
 import { URLField } from "./Forms/URLField";
 import { UserList } from "./Lists/UserList";
 import { DoneButton } from "./Buttons/DoneButton";
+import { SurrenderButton } from "./Buttons/SurrenderButton";
 
 import { validateWikipediaUrl } from "../../utils/validations";
 import { useRoomData } from "../../hooks/firebase";
@@ -41,12 +42,15 @@ export const GameContent: React.FC = (): JSX.Element => {
   const [urlError, setURLError] = useState<boolean>(false);
   const [urls, setUrls] = useState<string[]>([]);
   const [isDone, setIsDone] = useState<boolean>(false);
+  const [isSurrendered, setIsSurrendered] = useState<boolean>(false);
   const [isSubscribeRoomData, setIsSubscribeRoomData] = useState<boolean>(true);
 
   const { users, host, status, start, goal } = useRoomData(
     isSubscribeRoomData,
     roomId
   );
+
+  const formEnable = !isDone && !isSurrendered;
 
   useEffect(() => {
     if (status === "ENDED") {
@@ -95,12 +99,24 @@ export const GameContent: React.FC = (): JSX.Element => {
 
   const handleDone = () => {
     if (!roomId || !userUuid) return;
-    done(roomId, userUuid, true, urls, userName).then(() => setIsDone(true));
+    done(roomId, userUuid, true, false, urls, userName).then(() =>
+      setIsDone(true)
+    );
   };
 
   const handleCancel = () => {
     if (!roomId || !userUuid) return;
-    done(roomId, userUuid, false).then(() => setIsDone(false));
+    done(roomId, userUuid, false, false).then(() => {
+      setIsDone(false);
+      setIsSurrendered(false);
+    });
+  };
+
+  const handleSurrender = () => {
+    if (!roomId || !userUuid) return;
+    done(roomId, userUuid, true, true, [], userName).then(() =>
+      setIsSurrendered(true)
+    );
   };
 
   return (
@@ -119,7 +135,7 @@ export const GameContent: React.FC = (): JSX.Element => {
         <Wrapper>
           {start && <Target startOrGoal="start" url={start} />}
           <UrlList urls={urls} />
-          {!isDone && (
+          {formEnable && (
             <URLField
               url={url}
               error={urlError}
@@ -130,10 +146,14 @@ export const GameContent: React.FC = (): JSX.Element => {
             />
           )}
           {goal && <Target startOrGoal="goal" url={goal} />}
+          {!isSurrendered && (
+            <SurrenderButton handleSurrender={handleSurrender} />
+          )}
         </Wrapper>
         <DoneButton
           disabled={urls.length === 0}
           isDone={isDone}
+          isSurrendered={isSurrendered}
           handleDone={handleDone}
           handleCancel={handleCancel}
         />

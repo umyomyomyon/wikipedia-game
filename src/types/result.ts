@@ -5,4 +5,9 @@ export interface Result {
   results: UserResult[];
 }
 
-export type UserResult = { uuid: string; name: string; urls: string[] };
+export type UserResult = {
+  uuid: string;
+  name: string;
+  urls: string[];
+  isSurrendered: boolean;
+};

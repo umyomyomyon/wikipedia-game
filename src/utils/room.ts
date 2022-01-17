@@ -24,10 +24,11 @@ export const createRoom = async (
 export const arrangeUsers = (usersObj: UserObj | null): UserData[] => {
   if (!usersObj) return [];
   const arrangedUsers: UserData[] = Object.entries(usersObj).map(
-    ([uuid, { name, isDone }]) => ({
+    ([uuid, { name, isDone, isSurrendered }]) => ({
       uuid,
       name,
       isDone,
+      isSurrendered,
     })
   );
   return arrangedUsers;
@@ -91,6 +92,7 @@ export const done = async (
   roomId: number,
   uuid: string,
   isDone: boolean,
+  isSurrendered: boolean,
   urls?: string[],
   name?: string
 ): Promise<void> => {
@@ -102,6 +104,7 @@ export const done = async (
       uuid,
       name,
       is_done: isDone,
+      is_surrendered: isSurrendered,
     });
   } catch {
     console.error("error in done.");

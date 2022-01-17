@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 interface DoneButtonProps {
   disabled: boolean;
   isDone: boolean;
+  isSurrendered: boolean;
   handleDone: () => void;
   handleCancel: () => void;
 }
@@ -14,17 +15,18 @@ interface DoneButtonProps {
 export const DoneButton: React.FC<DoneButtonProps> = ({
   disabled,
   isDone,
+  isSurrendered,
   handleDone,
   handleCancel,
 }) => {
+  const cancelText = isSurrendered ? "やっぱりあきらめない" : "CANCEL";
   return (
     <React.Fragment>
-      {isDone ? (
+      {isDone || isSurrendered ? (
         <Button
           color="secondary"
           variant="contained"
           fullWidth
-          disabled={disabled}
           onClick={handleCancel}
           sx={{
             position: "absolute",
@@ -35,7 +37,7 @@ export const DoneButton: React.FC<DoneButtonProps> = ({
             margin: "auto",
           }}
         >
-          <Typography sx={{ fontWeight: "bold" }}>CANCEL</Typography>
+          <Typography sx={{ fontWeight: "bold" }}>{cancelText}</Typography>
         </Button>
       ) : (
         <Button

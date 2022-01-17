@@ -4,14 +4,12 @@ import React from "react";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 
-// icons
-import DoneIcon from "@mui/icons-material/Done";
-
 // components
-import { PlayerIcon } from "../../general/PlayerIcon";
+import { UserListIcon } from "./UserListIcon";
 
 // types
 import { UserData } from "../../../types/user";
+import { ImmutableRoomData } from "../../../types/room";
 
 interface UserListProps {
   users: UserData[];
@@ -30,22 +28,29 @@ export const UserList: React.FC<UserListProps> = ({ users, host }) => {
 
 interface UserListItemProps {
   user: UserData;
-  host: string | undefined;
+  host: ImmutableRoomData["host"];
 }
 
+const pickColor = (isDone: boolean, isSurrendered: boolean) => {
+  if (isSurrendered) return "secondary";
+  if (isDone) return "primary";
+};
+
 const UserListItem: React.FC<UserListItemProps> = ({ user, host }) => {
+  const color = pickColor(user.isDone, user.isSurrendered);
   return (
     <Stack direction="row">
       <Chip
         icon={
-          user.isDone ? (
-            <DoneIcon />
-          ) : (
-            <PlayerIcon uuid={user.uuid} host={host} />
-          )
+          <UserListIcon
+            isDone={user.isDone}
+            isSurrendered={user.isSurrendered}
+            uuid={user.uuid}
+            host={host}
+          />
         }
         label={user.name}
-        color={user.isDone ? "primary" : undefined}
+        color={color}
       />
     </Stack>
   );
