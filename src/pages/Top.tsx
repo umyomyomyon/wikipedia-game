@@ -13,6 +13,9 @@ import { WaitDialog } from "../components/Wait/Dialog";
 import { mode as modeAtom } from "../recoil/atoms/mode";
 import { userNameConfirmed as userNameConfirmedAtom } from "../recoil/atoms/user";
 
+// constants
+import { SCENE_MODES } from "../constants";
+
 // dev
 import { isDev } from "../conf";
 import { ModeChangeButton, RoomIdIndicator } from "../components/dev";
@@ -33,11 +36,11 @@ export const Top: React.FC = (): JSX.Element => {
 
   return (
     <React.Fragment>
-      {mode === "top" && (
+      {mode === SCENE_MODES.TOP && (
         <TopContent enable={!!userNameConfirmed} {...topPageButtonHandlers} />
       )}
-      {mode === "game" && <GameContent />}
-      {mode === "result" && <ResultContent />}
+      {mode === SCENE_MODES.GAME && <GameContent />}
+      {mode === SCENE_MODES.RESULT && <ResultContent />}
       {isDev && (
         <React.Fragment>
           <RoomIdIndicator />

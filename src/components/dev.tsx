@@ -9,11 +9,15 @@ import Chip from "@mui/material/Chip";
 import { mode as modeAtom } from "../recoil/atoms/mode";
 import { roomId as roomIdAtom } from "../recoil/atoms/room";
 
+// constants
+import { SCENE_MODES } from "../constants";
+
 export const ModeChangeButton: React.FC = (): JSX.Element => {
   const [mode, setMode] = useRecoilState(modeAtom);
 
   const handleClick = () => {
-    const nextMode = mode === "top" ? "game" : "top";
+    const nextMode =
+      mode === SCENE_MODES.TOP ? SCENE_MODES.GAME : SCENE_MODES.TOP;
     setMode(nextMode);
   };
 

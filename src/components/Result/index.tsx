@@ -17,6 +17,9 @@ import { mode as modeAtom } from "../../recoil/atoms/mode";
 // types
 import { Result } from "../../types/result";
 
+// constants
+import { SCENE_MODES } from "../../constants";
+
 import { getResult } from "../../utils/result";
 
 const Wrapper = styled("div")({
@@ -41,7 +44,7 @@ export const ResultContent: React.FC = (): JSX.Element => {
 
   const handleClick = () => {
     setRoomId(undefined);
-    setMode("top");
+    setMode(SCENE_MODES.TOP);
   };
 
   return (

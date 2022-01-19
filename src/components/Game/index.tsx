@@ -25,6 +25,9 @@ import {
   userName as userNameAtom,
 } from "../../recoil/atoms/user";
 
+// constants
+import { ROOM_STATUSES, SCENE_MODES } from "../../constants";
+
 const Wrapper = styled("div")({
   display: "flex",
   justifyContent: "center",
@@ -53,8 +56,8 @@ export const GameContent: React.FC = (): JSX.Element => {
   const formEnable = !isDone && !isSurrendered;
 
   useEffect(() => {
-    if (status === "ENDED") {
-      setMode("result");
+    if (status === ROOM_STATUSES.ENDED) {
+      setMode(SCENE_MODES.RESULT);
       return () => setIsSubscribeRoomData(false);
     }
   }, [status]);
