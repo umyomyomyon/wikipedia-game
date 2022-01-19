@@ -5,9 +5,9 @@ export interface Result {
   results: UserResult[];
 }
 
-export type UserResult = {
+export type UserResult = Readonly<{
   uuid: string;
   name: string;
   urls: string[];
   isSurrendered: boolean;
-};
+}>;

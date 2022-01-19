@@ -17,6 +17,9 @@ import { userUuid as userUuidAtom } from "../../../recoil/atoms/user";
 import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
 import { mode as modeAtom } from "../../../recoil/atoms/mode";
 
+// constants
+import { ROOM_STATUSES, SCENE_MODES } from "../../../constants";
+
 import { useRoomData, disconnectRoom } from "../../../hooks/firebase";
 import { extractTitleFromURL } from "../../../utils/validations";
 
@@ -56,15 +59,15 @@ export const WaitDialog: React.FC<WaitDialogProps> = ({
   }, [goal, open]);
 
   useEffect(() => {
-    if (status === "ONGOING") {
-      setMode("game");
+    if (status === ROOM_STATUSES.ONGOING) {
+      setMode(SCENE_MODES.GAME);
       handleClose();
     }
   }, [status]);
 
   // ダイアログが閉じられたときの処理
   useEffect(() => {
-    if (!open && !!status && status === "PREPARATION") {
+    if (!open && !!status && status === ROOM_STATUSES.PREPARATION) {
       setStartTarget(undefined);
       setGoalTarget(undefined);
       if (!roomId || !userUuid) return;

@@ -18,6 +18,9 @@ import { roomId as roomIdAtom } from "../../../recoil/atoms/room";
 import { mode as modeAtom } from "../../../recoil/atoms/mode";
 import { userUuid as userUuidAtom } from "../../../recoil/atoms/user";
 
+// constants
+import { SCENE_MODES } from "../../../constants";
+
 import { useCreateRoom, useRoomData } from "../../../hooks/firebase";
 import { startRoom, destroy } from "../../../utils/room";
 
@@ -50,7 +53,7 @@ export const CreateRoomDialog: React.FC<CreateRoomDialogProps> = ({
   const handleClickStart = () => {
     if (!userUuid || !roomId) return;
     startRoom(userUuid, roomId);
-    setMode("game");
+    setMode(SCENE_MODES.GAME);
     handleClose();
   };
 
