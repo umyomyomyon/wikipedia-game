@@ -1,5 +1,9 @@
 バックエンド: https://github.com/umyomyomyon/wikipedia-game-backend
 
+# architecture
+![wikipedia-game-arch drawio](https://user-images.githubusercontent.com/44522011/151651106-c6220b7e-a1ed-4b5c-88f9-33b24d3cf9e4.png)
+
+
 # screen shots
 
 ![Screenshot from 2022-01-05 19-34-53](https://user-images.githubusercontent.com/44522011/148203997-54d8cb86-5ed6-407d-af4b-5be8a2772482.png)
