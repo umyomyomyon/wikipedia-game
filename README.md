@@ -1,6 +1,22 @@
 バックエンド: https://github.com/umyomyomyon/wikipedia-game-backend
 
-# architecture
+# 目的
+普段discord上で行なっているwikipediaゲームを簡単に行えるようにしたかった
+
+## 構成
+**フロントエンド**: TypeScript, React, Recoil
+
+**バックエンド**: Python, Flask
+
+**インフラ, DB**:
+
+    front-end: Firebase Hosting, Github Actions
+  
+    backend: Cloud Run, Cloud Build, Container Registry
+    
+    DB: Firestore, Realtime Database
+  
+
 ![wikipedia-game-arch drawio](https://user-images.githubusercontent.com/44522011/151651106-c6220b7e-a1ed-4b5c-88f9-33b24d3cf9e4.png)
 
 
